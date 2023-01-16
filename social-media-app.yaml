@@ -2,23 +2,21 @@ openapi: 3.0.3
 info:
   title: Social-media-app API
   description: |-
-    Ini adalah rancangan dokumentasi API untuk Social-media-app
-
-    Oleh Kelompok 7
+    API Documentation for Social Media App By Group 7
   contact:
-    name: Kelompok 7
-    # email: Myemail@gmail.com
+    email: herdiladania11@gmail.com
   version: 1.0.0
 servers:
-  - url: example.com
-    description: digunakan untuk deployment
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/HERDILADANIA11/social-media-app/1.0.0
+  - description: Social Media API
+    url: http://localhost:8000/
+  
 tags:
-  - name: users
-  - name: posts
-  - name: stories
-  - name: articles
-  - name: photos
-  - name: comments
+  - name: user
+  - name: post
+  - name: comment
 
 paths:
   /home:
@@ -37,377 +35,338 @@ paths:
   /register:
     post:
       tags:
-        - "users"
+        - "user"
       description: used to register users
       summary: register users
       requestBody:
         content:
           application.json:
             schema:
-              $ref: '#/components/schemas/requestBodyUser'
-            example:
-              name: Myname
-              email: Myemail@gmail.com
-              password: qwertyuiop12344567
-              number_phone: "081245674452"
-              address: indonesia
+              $ref: '#/components/schemas/requestRegisterUser'
       responses:
         201:
-          description: "success register"
+          description: "success register user"
           content:
             application.json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-              example:
-                message: "success registered user"
-        400:
-          $ref: '#'
+                $ref: '#/components/schemas/responseRegisterUser'
+        400:      
+          $ref: '#/components/responses/badRequestResponse'
         500:
-          $ref: '#'
+          $ref: '#/components/responses/serverErrorResponse'
 
   /login:
     post:
       tags:
-        - "users"
+        - "user"
       description: used to login
       summary: login user
       requestBody:
         content:
           application.json:
             schema:
-              type: object
-              properties:
-                email: 
-                  type: string
-                password: 
-                  type: string
-            example:
-              email: Myemail@gmail.com
-              password: qwertyuiop12344567
+              $ref: '#/components/schemas/requestLoginUser'
       responses:
-        201:
+        200:
           description: "login succes"
           content:
             application.json:
               schema:
-                $ref: '#/components/schemas/responseObject'
-              example:
-                data: 
-                  id: 1
-                  name: Myname
-                  email: Myemail@gmail.com
-                token: abcdefghijklmnopqrstuvwxyz123456789
-                message: "login success"
+                $ref: '#/components/schemas/responseLoginUser'
         404:
-          $ref: '#'
+          $ref: '#/components/responses/badRequestResponse'
         500:
-          $ref: '#'
-  /users:
+          $ref: '#/components/responses/serverErrorResponse'
+  /user:
     get:
       tags:
-        - "users"
+        - "user"
       description: used to show profile
-      summary: show profile
+      summary: show user profile
+      security:
+        - jwt_auth: []      
       responses:
-        201:
-          description: success show profile
+        200:
+          description: success show user profile
           content:
             application.json:
               schema:
-                $ref: '#/components/schemas/responseObject'
-              example: 
-                data:
-                  id: 1
-                  name: Myname
-                  email: Myemail2@gmail.com
-                  password: poiuytrewq987654321
-                  number_phone: "08129876543"
-                  address: Jakarta
-                message: "success show profile"
+                $ref: '#/components/schemas/responseProfile'
         404:
-          $ref: '#'
+          $ref: '#/components/responses/notFoundResponse'
         500:
-          $ref: '#'
+          $ref: '#/components/responses/serverErrorResponse'
 
-    patch:
+    put:
       tags:
-        - "users"
-      description: user for update user data
+        - "user"
+      description: used for update user data
       summary: update user
+      security:
+        - jwt_auth: []
       requestBody:
         content:
           application.json:
             schema:
-              $ref: '#/components/schemas/requestBodyUser'
-            example:
-              name: Myname2
-              email: Myemail2@gmail.com
-              password: qwertyuiop12344567
-              number_phone: "081245674452"
-              address: indonesia
+              $ref: '#/components/schemas/requestUpdate'
       responses:
         201:
           description: success updated user
           content:
             application.json:
               schema:
-                $ref: '#/components/schemas/responseObject'
-              example: 
-                data:
-                  id: 1
-                  name: Myname2
-                  email: Myemail2@gmail.com
-                  password: poiuytrewq987654321
-                  number_phone: "08129876543"
-                  address: Jakarta
-                message: "success update user"
+                $ref: '#/components/schemas/responseUpdateUser'
+        400:
+          $ref: '#/components/responses/badRequestResponse'
         404:
-          $ref: '#'
+          $ref: '#/components/responses/notFoundResponse'
         500:
-          $ref: '#'
+          $ref: '#/components/responses/serverErrorResponse'
     delete:
       tags:
-        - "users"
+        - "user"
       description: used to delete user
       summary: delete user
+      security:
+        - jwt_auth: []
+      
       responses:
         201:
-          description: delete success
+          description: succes delete user
           content:
             application.json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                example: "user deleted successfully"
+                $ref: '#/components/schemas/responseDelete'
         404:
-          $ref: '#'
+          $ref: '#/components/responses/notFoundResponse'
         500:
-          $ref: '#'
-  /posts:
+          $ref: '#/components/responses/serverErrorResponse'
+  /post:
     get:
       tags:
-        - "posts"
-      description: used to show all post
-      summary: show all posts
+        - "post"
+      description: used to show all posts
+      summary: get all posts
+
       responses: 
-        201:
-          $ref: '#'          
+        200:
+          description: Success get all post
+          content:
+            application.json:
+              schema:
+                $ref: '#/components/schemas/responsePostArr'
         404:
-          $ref: '#'
+          $ref: '#/components/responses/notFoundResponse'
         500:
-          $ref: '#'
+          $ref: '#/components/responses/serverErrorResponse'
+    post:
+      tags:
+        - "post"
+      description: used to add new post
+      summary: add new post
+      security:
+        - jwt_auth: []
+      requestBody:
+        content:
+          application.json:
+            schema:
+              $ref: '#/components/schemas/requestPost'
+            example:
+              description: Happy New Year
+              photos:
+                - img1.jpg
+                - img2.jpg
+      responses: 
+        200:
+          description: Success add new post
+          content:
+            application.json:
+              schema:
+                $ref: '#/components/schemas/responseAddPost'
+        404:
+          $ref: '#/components/responses/notFoundResponse'
+        500:
+          $ref: '#/components/responses/serverErrorResponse'
+
+  /post/{post_id}:
+    parameters:
+        - name: post_id
+          in: path
+          required: true
+          schema: 
+            type: integer
+    get:
+      tags:
+        - "post"
+
+      description: used to show post by id
+      summary: get post by id
+      responses: 
+        200:
+          description: Success get all post
+          content:
+            application.json:
+              schema:
+                $ref: '#/components/schemas/responsePost'
+        404:
+          $ref: '#/components/responses/notFoundResponse'
+        500:
+          $ref: '#/components/responses/serverErrorResponse'
+    put:
+      tags:
+        - "post"
+      description: used for update post 
+      summary: update post
+      security:
+        - jwt_auth: []
+      requestBody:
+        content:
+          application.json:
+            schema:
+              $ref: '#/components/schemas/requestPost'
+            example:
+              description: My First Project
+              photos:
+                - img1.jpg
+                - img2.jpg              
+      responses:
+        201:
+          description: success updated post
+          content:
+            application.json:
+              schema:
+                $ref: '#/components/schemas/responseUpdatePost'
+                  
+        400:
+          $ref: '#/components/responses/badRequestResponse'
+        404:
+          $ref: '#/components/responses/notFoundResponse'
+        500:
+          $ref: '#/components/responses/serverErrorResponse'
     delete:
       tags:
-        - "posts"
-      description: used to delete posts
+        - "post"
+      description: used to delete post
       summary: delete post
-      responses: 
+      security:
+        - jwt_auth: []
+      
+      responses:
         201:
-          $ref: '#'          
+          description: succes delete post
+          content:
+            application.json:
+              schema:
+                $ref: '#/components/schemas/responseDelete'
         404:
-          $ref: '#'
+          $ref: '#/components/responses/notFoundResponse'
         500:
-          $ref: '#'
-  /posts/story:
+          $ref: '#/components/responses/serverErrorResponse'
+  /comment/{post_id}:
+    parameters:
+        - name: post_id
+          in: path
+          required: true
+          schema: 
+            type: integer
     post:
       tags:
-        - "stories"
-      description: used to post story
-      summary: post story
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                storyName :
-                  type: string
-                storyDate:
-                  type: string
-                file:
-                  type: array
-                  items:
-                    type: string
-                    format: binary
-      responses: 
-        201:
-          $ref: '#'          
-        404:
-          $ref: '#'
-        500:
-          $ref: '#'
-    get:
-      tags:
-        - "stories"
-      description: used to show all stories
-      summary: show all stories
-      responses: 
-        201:
-          $ref: '#'          
-        404:
-          $ref: '#'
-        500:
-          $ref: '#'
-    patch:
-      tags:
-        - "stories"
-      description: used to edit story
-      summary: edit story
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                storyName :
-                  type: string
-                storyDate:
-                  type: string
-                file:
-                  type: array
-                  items:
-                    type: string
-                    format: binary
-      responses: 
-        201:
-          $ref: '#'          
-        404:
-          $ref: '#'
-        500:
-          $ref: '#'
-
-  /post/article:
-    post:
-      tags:
-        - "articles"
-      description: used to post article
-      summary: post article
-      requestBody:
-        content:
-          application.json:
-            schema:
-              type: object
-      responses: 
-        201:
-          $ref: '#'          
-        404:
-          $ref: '#'
-        500:
-          $ref: '#'
-    get:
-      tags:
-        - "articles"
-      description: used to show all article
-      summary: show all article
-      responses: 
-        201:
-          $ref: '#'          
-        404:
-          $ref: '#'
-        500:
-          $ref: '#'
-    patch:
-      tags:
-        - "articles"
-      description: used to edit article
-      summary: edit article
-      requestBody:
-        content:
-          application.json:
-            schema:
-              type: object
-      responses: 
-        201:
-          $ref: '#'          
-        404:
-          $ref: '#'
-        500:
-          $ref: '#'
-  /post/photo:
-    post:
-      tags:
-        - "photos"
-      description: used to post photo
-      summary: post photo
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-      responses: 
-        201:
-          $ref: '#'          
-        404:
-          $ref: '#'
-        500:
-          $ref: '#'
-    get:
-      tags:
-        - "photos"
-      description: used to show all photos
-      summary: show all photos
-      responses: 
-        201:
-          $ref: '#'          
-        404:
-          $ref: '#'
-        500:
-          $ref: '#'
-    patch:
-      tags:
-        - "photos"
-      description: used to edit photo
-      summary: edit photo
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-      responses: 
-        201:
-          $ref: '#'          
-        404:
-          $ref: '#'
-        500:
-          $ref: '#'
-  /comments:
-    post:
-      tags:
-        - "comments"
+        - "comment"
       description: used to add comments
       summary: add comments
+      security:
+        - jwt_auth: []     
       requestBody:
         content:
           application.json:
             schema:
               type: object
+              properties:
+                comment:
+                  type: string
+            example:
+              comment: Nice !!!
+
       responses: 
         201:
-          $ref: '#'          
+          description: succes add comment
+          content:
+            application.json:
+              schema: 
+                type: object
+                properties:
+                  status: 
+                    type: string
+                  code: 
+                    type: integer
+                  data:
+                    type: object
+                    properties:
+                      comment_id:
+                        type: integer
+                      comment: 
+                        type: string
+                      created_at:
+                        type: string
+                  message:
+                    type: string
+              example:
+                status: ok
+                code: 200
+                data: 
+                  comment_id: 1
+                  comment: Nice !!!
+                  created_at: "01-01-2023"
+                message: successfully added comment           
+        400:
+          $ref: '#/components/responses/badRequestResponse'        
         404:
-          $ref: '#'
+          $ref: '#/components/responses/notFoundResponse'
         500:
-          $ref: '#'
+          $ref: '#/components/responses/serverErrorResponse'
     get:
       tags:
-        - "comments"
-      description: used to show comments
-      summary: show comments
+        - "comment"
+      description: used to show all comments
+      summary: get all comments
       responses: 
         201:
-          $ref: '#'          
+          description: succes get all comments
+          content:
+            application.json:
+              schema:
+                $ref: '#/components/schemas/responseGetAllComment'  
+              example:
+                status: ok
+                code : 200
+                data:
+                  - comment_id: 1
+                    username: herdiladania11
+                    comment: Nice Bro
+                    created_at: "10-01-2023"
+                  - comment_id: 2
+                    username: fajar1313
+                    comment: OMG HAHAHAHA
+                    created_at: "11-01-2023"
+                  - comment_id: 3
+                    username: RischiYuda
+                    comment: XD
+                    created_at: "12-01-2023"
+                message: successfully show comments
         404:
-          $ref: '#'
+          $ref: '#/components/responses/notFoundResponse'
         500:
-          $ref: '#'
-    patch:
+          $ref: '#/components/responses/serverErrorResponse'
+  /comment/{comment_id}:
+    parameters:
+        - name: comment_id
+          in: path
+          required: true
+          schema: 
+            type: integer
+    put:
       tags:
-        - "comments"
+        - "comment"
       description: used to edit comments
       summary: edit comments
       requestBody:
@@ -415,50 +374,409 @@ paths:
           application.json:
             schema:
               type: object
+              properties:
+                comment:
+                  type: string
+            example:
+              comment: Nice !!!
       responses: 
         201:
-          $ref: '#'          
+          description: succes add comment
+          content:
+            application.json:
+              schema: 
+                type: object
+                properties:
+                  status: 
+                    type: string
+                  code: 
+                    type: integer
+                  data:
+                    type: object
+                    properties:
+                      comment_id:
+                        type: integer
+                      comment: 
+                        type: string
+                      created_at:
+                        type: string
+                  message:
+                    type: string
+              example:
+                status: ok
+                code: 200
+                data: 
+                  comment_id: 1
+                  comment: Nice Bro !!!
+                  updated_at: "13-01-2023"
+                message: successfully edited comment  
+        400 :
+          $ref: '#/components/responses/badRequestResponse'              
         404:
-          $ref: '#'
+          $ref: '#/components/responses/notFoundResponse'
         500:
-          $ref: '#'
+          $ref: '#/components/responses/serverErrorResponse'
     delete:
       tags:
-        - "comments"
-      description: used to show comments
-      summary: show comments
+        - "comment"
+      description: used to delete comments
+      summary: delete comments
+      security:
+        - jwt_auth: []
+      
       responses: 
         201:
-          $ref: '#'          
+          description: succes delete comment
+          content:
+            application.json:
+              schema:
+                $ref: '#/components/schemas/responseDelete'      
         404:
-          $ref: '#'
+          $ref: '#/components/responses/notFoundResponse'
         500:
-          $ref: '#'
-      
+          $ref: '#/components/responses/serverErrorResponse'
     
-    
-  
-
 components:
+  securitySchemes:
+    jwt_auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: "used JWT token for Auth"
   schemas:
-    requestBodyUser:
+    requestRegisterUser:
       type: object
       properties:
         name:
          type: string
+        username:
+          type: string
         email:
          type: string
         password:
-          type: string
-        number_phone:
-          type: string
-        address:
-          type: string        
-    responseObject:
+          type: string  
+      example:
+        name: MyName
+        username: MyUserName
+        email: MyEmail@gmail.com
+        password: qwertyuiop12344567890qwertyuiop
+    responseRegisterUser:
       type: object
       properties:
+        status:
+          type: string
+        code:
+          type: integer
         data:
           type: object
+          properties:
+            data:
+              type: object
+              properties:
+                name:
+                  type: string
+                username:
+                  type: string
+                email:
+                  type: string
+            token:
+              type: string
+            message:
+              type: string
+      example:
+        status: ok
+        code: 201
+        data:
+          name: Myname
+          username: MyUserName
+          email: MyEmail@gmail.com
+        token: 12344567890qwertyuiop
+        message: registered successfully
+
+    requestLoginUser:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      example:
+        email: Myemail@gmail.com
+        password: qwertyuiop12345678
+    responseLoginUser:
+      type: object
+      properties:
+        status:
+          type: string
+        code:
+          type: integer
+        data:
+          type: object
+          properties:
+            data:
+              type: object
+              properties:
+                name:
+                  type: string
+                username:
+                  type: string
+                email:
+                  type: string 
+        token:
+          type: string
         message:
           type: string
-        
+      example:
+        status: ok
+        code: 200
+        data:
+          name: MyName
+          username: MyUserName
+          email: MyEmail@gmail.com
+        token: 12344567890qwertyuiop
+        message: login successfully
+    responseProfile:
+      type: object
+      properties:
+        status:
+          type: string
+        code:
+          type: integer
+        data:
+          type: object
+          properties:
+            name:
+              type: string
+            username:
+              type: string
+            email:
+              type: string            
+        message:
+          type: string
+      example:
+        status: ok
+        code: 200
+        data:
+          name: Myname
+          username: MyUserName
+          email: MyEmail@gmail.com
+        message: Show profile successfully
+    requestUpdate:
+      type: object
+      properties:
+        name:
+         type: string
+        username:
+          type: string
+        email:
+         type: string
+        password:
+          type: string  
+      example:
+        name: MyName
+        username: MyUserName
+        email: MyEmail@gmail.com
+        password: qwertyuiop12344567890qwertyuiop
+    responseUpdateUser:
+      type: object
+      example:
+        status: ok
+        code: 201
+        data:
+          name: Myname
+          username: MyUserName
+          email: MyEmail@gmail.com
+        token: 12344567890qwertyuiop
+        message: registered successfully
+    responseDelete:
+       type: object
+       example:
+        status: ok
+        code: 200
+        message: deleted successfully
+    requestPost:
+      type: object
+      properties:
+        description:
+          type: string
+        file_photos:
+          type: array
+          items:
+            type: object
+    responseAddPost:
+      type: object
+      properties:
+        status: 
+          type: string
+        code:
+          type: integer
+        data: 
+            type: object
+        message:
+          type: string     
+      example:
+        status: ok
+        code: 200
+        data: 
+          post_id: 1
+          username: herdiladania11
+          description: Happy New Year
+          created_at: "01-01-2023"
+          photos:
+              - img1.jpg
+              - img2.jpg
+        message: successfully add new post
+    responsePostArr:
+      type: object
+      properties:
+        status: 
+          type: string
+        code:
+          type: integer
+        data: 
+          type: array
+          items:
+            type: object
+        message:
+          type: string
+      example:
+        status: ok
+        code: 200
+        data: 
+          - post_id: 1
+            username: herdiladania11
+            description: Happy New Year
+            created_at: "01-01-2023"
+            photos:
+              - img1.jpg
+          - post_id: 2
+            username: Fajar1313
+            description: Coding everywhere
+            created_at: "05-01-2023"
+            photos:
+              - img1.jpg
+              - img2.jpg
+          - post_id: 3
+            username: RischiYuda
+            description: "Coding, sometimes called computer programming, is how we communicate with computers. Code tells a computer what actions to take, and writing code is like creating a set of instructions. By learning to write code, you can tell computers what to do or how to behave in a much faster way. You can use this skill to make websites and apps, process data, and do lots of other cool things."
+            created_at: "05-01-2023"
+            photos: ""
+        message: successfully get all posts
+    responsePost:
+      type: object
+      properties:
+        status: 
+          type: string
+        code:
+          type: integer
+        data: 
+            type: object
+        message:
+          type: string     
+      example:
+        status: ok
+        code: 200
+        data: 
+          post_id: 1
+          username: herdiladania11
+          description: Happy New Year
+          created_at: "01-01-2023"
+          photos:
+              - img1.jpg
+        message: successfully get post by id
+    responseUpdatePost:
+      type: object
+      properties:
+        status: 
+          type: string
+        code:
+          type: integer
+        data: 
+            type: object
+        message:
+          type: string     
+      example:
+        status: ok
+        code: 200
+        data: 
+          post_id: 1
+          username: herdiladania11
+          description: Happy New Year
+          created_at: "01-01-2023"
+          photos:
+              - img1.jpg
+        message: successfully updated post
+    responseGetAllComment:
+      type: object
+      properties:
+        status: 
+          type: string
+        code:
+          type: integer
+        data: 
+            type: array
+            items:
+              type: object
+              properties:
+                comment_id:
+                  type: integer
+                username:
+                  type: string
+                comment: 
+                  type: integer
+                created_at:
+                  type: string
+        message:
+          type: string      
+  responses:
+    badRequestResponse:
+      description: Bad request
+      content:
+        application.json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+              status:
+                type: string
+              message:
+                type: string
+            example:
+              code: 400
+              status: bad request
+              message: input invalid
+    notFoundResponse:
+      description: Not Found
+      content:
+        application.json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+              status:
+                type: string
+              message:
+                type: string
+            example:
+              code: 404
+              status: not found
+              message: data not Found
+    serverErrorResponse:
+      description: Internal Server Error
+      content:
+        application.json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+              status:
+                type: string
+              message:
+                type: string
+            example:
+              code: 500
+              status: internal server error
+              message: server error
