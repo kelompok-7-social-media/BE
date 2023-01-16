@@ -1,23 +1,31 @@
 package handler
 
-import (
-	"api/features/user"
-)
+import "project/features/user"
 
 type UserReponse struct {
-	ID    uint   `json:"id"`
-	Name  string `json:"nama"`
-	HP    string `json:"hp"`
-	Email string `json:"email"`
+	ID       uint   `json:"id"`
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Username string `json:"username"`
+	Password string `json:"password"`
 }
 
 func ToResponse(data user.Core) UserReponse {
 	return UserReponse{
-		ID:    data.ID,
-		Name:  data.Name,
-		HP:    data.HP,
-		Email: data.Email,
+		ID:       data.ID,
+		Name:     data.Name,
+		Email:    data.Email,
+		Username: data.Username,
+		Password: data.Password,
 	}
+}
+func fromCoreList(dataCore []user.Core) []UserReponse {
+	var dataResponse []UserReponse
+
+	for _, v := range dataCore {
+		dataResponse = append(dataResponse, ToResponse(v))
+	}
+	return dataResponse
 }
 
 // func PrintSuccessReponse(code int, message string, data ...interface{}) (int, interface{}) {
