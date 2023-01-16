@@ -1,0 +1,464 @@
+openapi: 3.0.3
+info:
+  title: Social-media-app API
+  description: |-
+    Ini adalah rancangan dokumentasi API untuk Social-media-app
+
+    Oleh Kelompok 7
+  contact:
+    name: Kelompok 7
+    # email: Myemail@gmail.com
+  version: 1.0.0
+servers:
+  - url: example.com
+    description: digunakan untuk deployment
+tags:
+  - name: users
+  - name: posts
+  - name: stories
+  - name: articles
+  - name: photos
+  - name: comments
+
+paths:
+  /home:
+    get:
+      responses:
+        200:
+          description: success message
+          content:
+            application.json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                example: "Hello, Welcome !!!"
+  /register:
+    post:
+      tags:
+        - "users"
+      description: used to register users
+      summary: register users
+      requestBody:
+        content:
+          application.json:
+            schema:
+              $ref: '#/components/schemas/requestBodyUser'
+            example:
+              name: Myname
+              email: Myemail@gmail.com
+              password: qwertyuiop12344567
+              number_phone: "081245674452"
+              address: indonesia
+      responses:
+        201:
+          description: "success register"
+          content:
+            application.json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "success registered user"
+        400:
+          $ref: '#'
+        500:
+          $ref: '#'
+
+  /login:
+    post:
+      tags:
+        - "users"
+      description: used to login
+      summary: login user
+      requestBody:
+        content:
+          application.json:
+            schema:
+              type: object
+              properties:
+                email: 
+                  type: string
+                password: 
+                  type: string
+            example:
+              email: Myemail@gmail.com
+              password: qwertyuiop12344567
+      responses:
+        201:
+          description: "login succes"
+          content:
+            application.json:
+              schema:
+                $ref: '#/components/schemas/responseObject'
+              example:
+                data: 
+                  id: 1
+                  name: Myname
+                  email: Myemail@gmail.com
+                token: abcdefghijklmnopqrstuvwxyz123456789
+                message: "login success"
+        404:
+          $ref: '#'
+        500:
+          $ref: '#'
+  /users:
+    get:
+      tags:
+        - "users"
+      description: used to show profile
+      summary: show profile
+      responses:
+        201:
+          description: success show profile
+          content:
+            application.json:
+              schema:
+                $ref: '#/components/schemas/responseObject'
+              example: 
+                data:
+                  id: 1
+                  name: Myname
+                  email: Myemail2@gmail.com
+                  password: poiuytrewq987654321
+                  number_phone: "08129876543"
+                  address: Jakarta
+                message: "success show profile"
+        404:
+          $ref: '#'
+        500:
+          $ref: '#'
+
+    patch:
+      tags:
+        - "users"
+      description: user for update user data
+      summary: update user
+      requestBody:
+        content:
+          application.json:
+            schema:
+              $ref: '#/components/schemas/requestBodyUser'
+            example:
+              name: Myname2
+              email: Myemail2@gmail.com
+              password: qwertyuiop12344567
+              number_phone: "081245674452"
+              address: indonesia
+      responses:
+        201:
+          description: success updated user
+          content:
+            application.json:
+              schema:
+                $ref: '#/components/schemas/responseObject'
+              example: 
+                data:
+                  id: 1
+                  name: Myname2
+                  email: Myemail2@gmail.com
+                  password: poiuytrewq987654321
+                  number_phone: "08129876543"
+                  address: Jakarta
+                message: "success update user"
+        404:
+          $ref: '#'
+        500:
+          $ref: '#'
+    delete:
+      tags:
+        - "users"
+      description: used to delete user
+      summary: delete user
+      responses:
+        201:
+          description: delete success
+          content:
+            application.json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                example: "user deleted successfully"
+        404:
+          $ref: '#'
+        500:
+          $ref: '#'
+  /posts:
+    get:
+      tags:
+        - "posts"
+      description: used to show all post
+      summary: show all posts
+      responses: 
+        201:
+          $ref: '#'          
+        404:
+          $ref: '#'
+        500:
+          $ref: '#'
+    delete:
+      tags:
+        - "posts"
+      description: used to delete posts
+      summary: delete post
+      responses: 
+        201:
+          $ref: '#'          
+        404:
+          $ref: '#'
+        500:
+          $ref: '#'
+  /posts/story:
+    post:
+      tags:
+        - "stories"
+      description: used to post story
+      summary: post story
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                storyName :
+                  type: string
+                storyDate:
+                  type: string
+                file:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses: 
+        201:
+          $ref: '#'          
+        404:
+          $ref: '#'
+        500:
+          $ref: '#'
+    get:
+      tags:
+        - "stories"
+      description: used to show all stories
+      summary: show all stories
+      responses: 
+        201:
+          $ref: '#'          
+        404:
+          $ref: '#'
+        500:
+          $ref: '#'
+    patch:
+      tags:
+        - "stories"
+      description: used to edit story
+      summary: edit story
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                storyName :
+                  type: string
+                storyDate:
+                  type: string
+                file:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses: 
+        201:
+          $ref: '#'          
+        404:
+          $ref: '#'
+        500:
+          $ref: '#'
+
+  /post/article:
+    post:
+      tags:
+        - "articles"
+      description: used to post article
+      summary: post article
+      requestBody:
+        content:
+          application.json:
+            schema:
+              type: object
+      responses: 
+        201:
+          $ref: '#'          
+        404:
+          $ref: '#'
+        500:
+          $ref: '#'
+    get:
+      tags:
+        - "articles"
+      description: used to show all article
+      summary: show all article
+      responses: 
+        201:
+          $ref: '#'          
+        404:
+          $ref: '#'
+        500:
+          $ref: '#'
+    patch:
+      tags:
+        - "articles"
+      description: used to edit article
+      summary: edit article
+      requestBody:
+        content:
+          application.json:
+            schema:
+              type: object
+      responses: 
+        201:
+          $ref: '#'          
+        404:
+          $ref: '#'
+        500:
+          $ref: '#'
+  /post/photo:
+    post:
+      tags:
+        - "photos"
+      description: used to post photo
+      summary: post photo
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+      responses: 
+        201:
+          $ref: '#'          
+        404:
+          $ref: '#'
+        500:
+          $ref: '#'
+    get:
+      tags:
+        - "photos"
+      description: used to show all photos
+      summary: show all photos
+      responses: 
+        201:
+          $ref: '#'          
+        404:
+          $ref: '#'
+        500:
+          $ref: '#'
+    patch:
+      tags:
+        - "photos"
+      description: used to edit photo
+      summary: edit photo
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+      responses: 
+        201:
+          $ref: '#'          
+        404:
+          $ref: '#'
+        500:
+          $ref: '#'
+  /comments:
+    post:
+      tags:
+        - "comments"
+      description: used to add comments
+      summary: add comments
+      requestBody:
+        content:
+          application.json:
+            schema:
+              type: object
+      responses: 
+        201:
+          $ref: '#'          
+        404:
+          $ref: '#'
+        500:
+          $ref: '#'
+    get:
+      tags:
+        - "comments"
+      description: used to show comments
+      summary: show comments
+      responses: 
+        201:
+          $ref: '#'          
+        404:
+          $ref: '#'
+        500:
+          $ref: '#'
+    patch:
+      tags:
+        - "comments"
+      description: used to edit comments
+      summary: edit comments
+      requestBody:
+        content:
+          application.json:
+            schema:
+              type: object
+      responses: 
+        201:
+          $ref: '#'          
+        404:
+          $ref: '#'
+        500:
+          $ref: '#'
+    delete:
+      tags:
+        - "comments"
+      description: used to show comments
+      summary: show comments
+      responses: 
+        201:
+          $ref: '#'          
+        404:
+          $ref: '#'
+        500:
+          $ref: '#'
+      
+    
+    
+  
+
+components:
+  schemas:
+    requestBodyUser:
+      type: object
+      properties:
+        name:
+         type: string
+        email:
+         type: string
+        password:
+          type: string
+        number_phone:
+          type: string
+        address:
+          type: string        
+    responseObject:
+      type: object
+      properties:
+        data:
+          type: object
+        message:
+          type: string
+        
