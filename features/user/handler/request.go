@@ -1,6 +1,6 @@
 package handler
 
-import "api/features/user"
+import "project/features/user"
 
 type LoginRequest struct {
 	Email    string `json:"email" form:"email"`
@@ -8,16 +8,28 @@ type LoginRequest struct {
 }
 
 type RegisterRequest struct {
-	Name     string `json:"nama" form:"nama"`
-	Username string `json:"username" form:"username"`
+	Name     string `json:"name" form:"name"`
 	Email    string `json:"email" form:"email"`
+	Username string `json:"username" form:"username"`
 	Password string `json:"password" form:"password"`
 }
 
 type UpdateRequest struct {
-	Name     string `json:"nama" form:"nama"`
+	// Name     string `json:"name" form:"name"`
+	// Email    string `json:"email" form:"email"`
 	Username string `json:"username" form:"username"`
+	// Password string `json:"password" form:"password"`
+}
+type UpdateRequest2 struct {
+	// Name     string `json:"name" form:"name"`
+	// Email    string `json:"email" form:"email"`
+	// Username string `json:"username" form:"username"`
+	Password string `json:"password" form:"password"`
+}
+type DeleteRequest struct {
+	Name     string `json:"name" form:"name"`
 	Email    string `json:"email" form:"email"`
+	Username string `json:"username" form:"username"`
 	Password string `json:"password" form:"password"`
 }
 
@@ -32,14 +44,26 @@ func ToCore(data interface{}) *user.Core {
 	case RegisterRequest:
 		cnv := data.(RegisterRequest)
 		res.Name = cnv.Name
-		res.Username= cnv.Username
 		res.Email = cnv.Email
+		res.Username = cnv.Username
 		res.Password = cnv.Password
 	case UpdateRequest:
-		cnv := data.(RegisterRequest)
-		res.Name = cnv.Name
+		cnv := data.(UpdateRequest)
+		// res.Name = cnv.Name
+		// res.Email = cnv.Email
 		res.Username = cnv.Username
+		// res.Password = cnv.Password
+	case UpdateRequest2:
+		cnv := data.(UpdateRequest2)
+		// res.Name = cnv.Name
+		// res.Email = cnv.Email
+		// res.Username = cnv.Username
+		res.Password = cnv.Password
+	case DeleteRequest:
+		cnv := data.(DeleteRequest)
+		res.Name = cnv.Name
 		res.Email = cnv.Email
+		res.Username = cnv.Username
 		res.Password = cnv.Password
 	default:
 		return nil
