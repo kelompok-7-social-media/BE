@@ -2,9 +2,11 @@ package config
 
 import (
 	"fmt"
+
 	"log"
-	user "project/features/user/data"
+	image "project/features/image/data"
 	posting "project/features/posting/data"
+	user "project/features/user/data"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -25,5 +27,6 @@ func InitDB(ac AppConfig) *gorm.DB {
 func Migrate(db *gorm.DB) {
 	db.AutoMigrate(user.User{})
 	db.AutoMigrate(posting.Posting{})
+	db.AutoMigrate(image.Image{})
 
 }

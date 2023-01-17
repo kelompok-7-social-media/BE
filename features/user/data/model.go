@@ -1,6 +1,7 @@
 package data
 
 import (
+	"project/features/posting/data"
 	"project/features/user"
 
 	"gorm.io/gorm"
@@ -12,6 +13,7 @@ type User struct {
 	Email    string
 	Username string
 	Password string
+	Posting  []data.Posting
 }
 
 func ToCore(data User) user.Core {
