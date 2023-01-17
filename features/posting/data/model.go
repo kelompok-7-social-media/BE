@@ -11,7 +11,7 @@ type Posting struct {
 	ImageID   uint
 }
 
-type BookPemilik struct {
+type PostUser struct {
 	ID        uint
 	Postingan string
 	UserName  string
