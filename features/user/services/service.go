@@ -118,13 +118,13 @@ func (uuc *userUseCase) Profile(token interface{}) (user.Core, error) {
 }
 
 func (uuc *userUseCase) Update(token interface{}, updateData user.Core) (user.Core, error) {
-	err := uuc.vld.Struct(updateData)
-	if err != nil {
-		if _, ok := err.(*validator.InvalidValidationError); ok {
-			log.Println(err)
-		}
-		return user.Core{}, errors.New("validation error")
-	}
+	// err := uuc.vld.Struct(updateData)
+	// if err != nil {
+	// 	if _, ok := err.(*validator.InvalidValidationError); ok {
+	// 		log.Println(err)
+	// 	}
+	// 	return user.Core{}, errors.New("validation error")
+	// }
 	hashed, err := helper.GeneratePassword(updateData.Password)
 	id := helper.ExtractToken(token)
 	if err != nil {
