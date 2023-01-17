@@ -3,8 +3,8 @@ package services
 import (
 	"errors"
 	"log"
-	helper "project/HELPER"
 	user "project/features/user"
+	helper "project/helper"
 	"strings"
 
 	"github.com/go-playground/validator/v10"
