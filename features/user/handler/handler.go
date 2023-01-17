@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 	helper "project/HELPER"
 	"project/features/user"
@@ -42,8 +41,8 @@ func (uc *userControll) Login() echo.HandlerFunc {
 		if err != nil {
 			return c.JSON(helper.PrintErrorResponse(err.Error()))
 		}
-
-		return c.JSON(helper.PrintSuccessReponse(http.StatusOK, "berhasil login", res, token))
+		dataResp := ToResponse(res)
+		return c.JSON(helper.PrintSuccessReponse(http.StatusOK, "berhasil login", dataResp, token))
 	}
 }
 func (uc *userControll) Register() echo.HandlerFunc {
@@ -57,8 +56,8 @@ func (uc *userControll) Register() echo.HandlerFunc {
 		if err != nil {
 			return c.JSON(helper.PrintErrorResponse(err.Error()))
 		}
-
-		return c.JSON(helper.PrintSuccessReponse(http.StatusCreated, "berhasil mendaftar", res))
+		dataResp := ToResponse(res)
+		return c.JSON(helper.PrintSuccessReponse(http.StatusCreated, "berhasil mendaftar", dataResp))
 	}
 }
 func (uc *userControll) Profile() echo.HandlerFunc {
@@ -69,50 +68,31 @@ func (uc *userControll) Profile() echo.HandlerFunc {
 		if err != nil {
 			return c.JSON(helper.PrintErrorResponse(err.Error()))
 		}
-
-		return c.JSON(helper.PrintSuccessReponse(http.StatusOK, "berhasil lihat profil", res))
+		dataResp := ToResponse(res)
+		return c.JSON(helper.PrintSuccessReponse(http.StatusOK, "berhasil lihat profil", dataResp))
 	}
 }
 
 // // Update implements user.UserHandler
 func (uc *userControll) Update() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		fmt.Println("=========inputuser========")
+
 		ex := c.Get("user")
-		fmt.Println("=========inputuser2========")
+
 		// id, _ := strconv.Atoi(c.Param("id"))
 		input := UpdateRequest{}
 		if err := c.Bind(&input); err != nil {
 			return c.JSON(http.StatusBadRequest, "format inputan salah")
 		}
 		dataCore := *ToCore(input)
-		fmt.Println("=========input========")
+
 		res, err := uc.srv.Update(ex, dataCore)
-		fmt.Println("=========input2========")
-		if err != nil {
-			return c.JSON(helper.PrintErrorResponse(err.Error()))
-		}
-
-		return c.JSON(helper.PrintSuccessReponse(http.StatusCreated, "berhasil mengubah data", res))
-	}
-}
-
-func (uc *userControll) Update2() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		ex := c.Get("user")
-		// id, _ := strconv.Atoi(c.Param("id"))
-		input := UpdateRequest{}
-		if err := c.Bind(&input); err != nil {
-			return c.JSON(http.StatusBadRequest, "format inputan salah")
-		}
-		dataCore := *ToCore(input)
-		res, err := uc.srv.Update2(ex, dataCore)
 
 		if err != nil {
 			return c.JSON(helper.PrintErrorResponse(err.Error()))
 		}
-
-		return c.JSON(helper.PrintSuccessReponse(http.StatusCreated, "berhasil mengubah data", res))
+		dataResp := ToResponse(res)
+		return c.JSON(helper.PrintSuccessReponse(http.StatusCreated, "berhasil mengubah data", dataResp))
 	}
 }
 

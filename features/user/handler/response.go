@@ -19,6 +19,15 @@ func ToResponse(data user.Core) UserReponse {
 		Password: data.Password,
 	}
 }
+
+func ToResponses(data user.Core) UserReponse {
+	return UserReponse{
+
+		Name:     data.Name,
+		Email:    data.Email,
+		Username: data.Username,
+	}
+}
 func fromCoreList(dataCore []user.Core) []UserReponse {
 	var dataResponse []UserReponse
 

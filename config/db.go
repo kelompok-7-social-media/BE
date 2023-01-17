@@ -1,9 +1,9 @@
 package config
 
 import (
-	user "api/features/user/data"
 	"fmt"
 	"log"
+	user "project/features/user/data"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
