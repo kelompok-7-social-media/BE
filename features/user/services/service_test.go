@@ -89,8 +89,8 @@ func TestUpdate(t *testing.T) {
 func TestDelete(t *testing.T) {
 	repo := mocks.NewUserData(t)
 
-	t.Run("sukse menghapus profile", func(t *testing.T) {
-		repo.On("Delete", uint(1)).Return(nil).Once()
+	t.Run("sukses menghapus profile", func(t *testing.T) {
+		repo.On("Delete", uint(1)).Return(user.Core{}, nil).Once()
 
 		srv := New(repo)
 		_, token := helper.GenerateJWT(1)
@@ -108,11 +108,11 @@ func TestDelete(t *testing.T) {
 
 		_, err := srv.Delete(token)
 		assert.NotNil(t, err)
-		assert.ErrorContains(t, err, "not valid")
+		assert.ErrorContains(t, err, "not found")
 	})
 
 	t.Run("data not found", func(t *testing.T) {
-		repo.On("Delete", uint(5)).Return(errors.New("data not found")).Once()
+		repo.On("Delete", uint(5)).Return(user.Core{}, errors.New("data not found")).Once()
 
 		srv := New(repo)
 
@@ -121,12 +121,12 @@ func TestDelete(t *testing.T) {
 		pToken.Valid = true
 		_, err := srv.Delete(pToken)
 		assert.NotNil(t, err)
-		assert.ErrorContains(t, err, "not found")
+		assert.ErrorContains(t, err, "tidak ditemukan")
 		repo.AssertExpectations(t)
 	})
 
 	t.Run("masalah di server", func(t *testing.T) {
-		repo.On("Delete", mock.Anything).Return(errors.New("terdapat masalah pada server")).Once()
+		repo.On("Delete", mock.Anything).Return(user.Core{}, errors.New("terdapat masalah pada server")).Once()
 		srv := New(repo)
 
 		_, token := helper.GenerateJWT(1)
