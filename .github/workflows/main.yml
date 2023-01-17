@@ -37,9 +37,9 @@ jobs:
         key: ${{ secrets.KEY }}
         port: ${{ secrets.PORT }}
         script: |
-          git pull origin main
+          git pull origin main 
+          docker rmi ${{ secrets.DOCKER_USER }}/project
+          docker pull ${{ secrets.DOCKER_USER }}/project
           docker stop project 
-          docker rm project 
-          docker rmi project-images:latest
-          docker build -t project-images:latest
-          docker run -d -p 8080:8080 -e SERVER_PORT=${{ secrets.SERVER_PORT }} -e DBUSER=${{ secrets.DBUSER }} -e DBPASS=${{ secrets.DBPASS }} -e DBHOST=${{ secrets.DBHOST }} -e DBPORT=${{ secrets.DBPORT }} -e DBNAME=${{ secrets.DBNAME }} --name project project-images:latest
+          docker rm project
+          docker run -d -p 8000:8000 -e SERVER_PORT=${{ secrets.SERVER_PORT }} -e DBUSER=${{ secrets.DBUSER }} -e DBPASS=${{ secrets.DBPASS }} -e DBHOST=${{ secrets.DBHOST }} -e DBPORT=${{ secrets.DBPORT }} -e DBNAME=${{ secrets.DBNAME }} --name project ${{ secrets.DOCKER_USER }}/project
