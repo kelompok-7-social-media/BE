@@ -2,14 +2,12 @@ package services
 
 import (
 	"errors"
-	"fmt"
 	"log"
 	helper "project/HELPER"
 	user "project/features/user"
 	"strings"
 
 	"github.com/go-playground/validator/v10"
-	"golang.org/x/crypto/bcrypt"
 )
 
 type userUseCase struct {
@@ -41,6 +39,13 @@ func (uuc *userUseCase) AllUser() ([]user.Core, error) {
 }
 
 func (uuc *userUseCase) Login(email, password string) (string, user.Core, error) {
+	// err := uuc.vld.Struct(email)
+	// if err != nil {
+	// 	if _, ok := err.(*validator.InvalidValidationError); ok {
+	// 		log.Println(err)
+	// 	}
+	// 	return "", user.Core{}, errors.New("validation error")
+	// }
 	res, err := uuc.qry.Login(email)
 	if err != nil {
 		msg := ""
@@ -52,9 +57,9 @@ func (uuc *userUseCase) Login(email, password string) (string, user.Core, error)
 		return "", user.Core{}, errors.New(msg)
 	}
 
-	if err := bcrypt.CompareHashAndPassword([]byte(res.Password), []byte(password)); err != nil {
+	if err := helper.CheckPassword(res.Password, password); err != nil {
 		log.Println("login compare", err.Error())
-		return "", user.Core{}, errors.New("password tidak sesuai")
+		return "", user.Core{}, errors.New("password tidak sesuai " + res.Password)
 	}
 
 	token, _ := helper.GenerateJWT(int(res.ID))
@@ -64,11 +69,21 @@ func (uuc *userUseCase) Login(email, password string) (string, user.Core, error)
 }
 
 func (uuc *userUseCase) Register(newUser user.Core) (user.Core, error) {
+
+	err := uuc.vld.Struct(newUser)
+	if err != nil {
+		if _, ok := err.(*validator.InvalidValidationError); ok {
+			log.Println(err)
+		}
+		return user.Core{}, errors.New("validation error")
+	}
 	hashed, err := helper.GeneratePassword(newUser.Password)
+
 	if err != nil {
 		log.Println("bcrypt error ", err.Error())
 		return user.Core{}, errors.New("password process error")
 	}
+
 	newUser.Password = string(hashed)
 	res, err := uuc.qry.Register(newUser)
 	if err != nil {
@@ -103,6 +118,13 @@ func (uuc *userUseCase) Profile(token interface{}) (user.Core, error) {
 }
 
 func (uuc *userUseCase) Update(token interface{}, updateData user.Core) (user.Core, error) {
+	err := uuc.vld.Struct(updateData)
+	if err != nil {
+		if _, ok := err.(*validator.InvalidValidationError); ok {
+			log.Println(err)
+		}
+		return user.Core{}, errors.New("validation error")
+	}
 	hashed, err := helper.GeneratePassword(updateData.Password)
 	id := helper.ExtractToken(token)
 	if err != nil {
@@ -110,9 +132,9 @@ func (uuc *userUseCase) Update(token interface{}, updateData user.Core) (user.Co
 		return user.Core{}, errors.New("password process error")
 	}
 	updateData.Password = string(hashed)
-	fmt.Println("========password========")
+
 	res, err := uuc.qry.Update(uint(id), updateData)
-	fmt.Println("========password2========")
+
 	if err != nil {
 		msg := ""
 		if strings.Contains(err.Error(), "not found") {
@@ -126,29 +148,6 @@ func (uuc *userUseCase) Update(token interface{}, updateData user.Core) (user.Co
 	return res, nil
 }
 
-func (uuc *userUseCase) Update2(token interface{}, updateData user.Core) (user.Core, error) {
-	hashed, err := helper.GeneratePassword(updateData.Password)
-	id := helper.ExtractToken(token)
-	if err != nil {
-		log.Println("bcrypt error ", err.Error())
-		return user.Core{}, errors.New("password process error")
-	}
-	updateData.Password = string(hashed)
-	fmt.Println("========password========")
-	res, err := uuc.qry.Update(uint(id), updateData)
-	fmt.Println("========password2========")
-	if err != nil {
-		msg := ""
-		if strings.Contains(err.Error(), "not found") {
-			msg = "data tidak ditemukan"
-		} else {
-			msg = "terdapat masalah pada server"
-		}
-		return user.Core{}, errors.New(msg)
-	}
-
-	return res, nil
-}
 func (uuc *userUseCase) Delete(token interface{}) (user.Core, error) {
 
 	id := helper.ExtractToken(token)
