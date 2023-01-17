@@ -42,4 +42,4 @@ jobs:
           docker rm project 
           docker rmi project-images:latest
           docker build -t project-images:latest
-          docker run --name socmed -d -p 80:8000 -e DBUSER=${{ secrets.DBUSER}} -e DBPASS=${{ secrets.DBPASS}} -e DBHOST=${{ secrets.DBHOST}} -e DBPORT=${{ secrets.DBPORT}} -e DBNAME=${{ secrets.DBNAME}} -e JWT_KEY=${{ secrets.JWT_KEY}} project
+          docker run -d -p 8080:8080 -e SERVER_PORT=${{ secrets.SERVER_PORT }} -e DBUSER=${{ secrets.DBUSER }} -e DBPASS=${{ secrets.DBPASS }} -e DBHOST=${{ secrets.DBHOST }} -e DBPORT=${{ secrets.DBPORT }} -e DBNAME=${{ secrets.DBNAME }} --name project project-images:latest
