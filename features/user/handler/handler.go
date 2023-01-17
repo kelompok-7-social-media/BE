@@ -2,7 +2,7 @@ package handler
 
 import (
 	"net/http"
-	helper "project/HELPER"
+	helper "project/helper"
 	"project/features/user"
 
 	"github.com/labstack/echo/v4"
