@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	user "project/features/user/data"
+	posting "project/features/posting/data"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -23,5 +24,6 @@ func InitDB(ac AppConfig) *gorm.DB {
 
 func Migrate(db *gorm.DB) {
 	db.AutoMigrate(user.User{})
+	db.AutoMigrate(posting.Posting{})
 
 }

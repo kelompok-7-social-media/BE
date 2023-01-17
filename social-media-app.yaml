@@ -4,34 +4,20 @@ info:
   description: |-
     API Documentation for Social Media App By Group 7
   contact:
-    email: herdiladania11@gmail.com
+    email: Group7@alta.id
   version: 1.0.0
 servers:
   # Added by API Auto Mocking Plugin
   - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/HERDILADANIA11/social-media-app/1.0.0
+    url: https://virtserver.swaggerhub.com/Group-Project7/social-media-app-api/1.0.0
   - description: Social Media API
     url: http://localhost:8000/
-  
+
 tags:
   - name: user
   - name: post
   - name: comment
-
 paths:
-  /home:
-    get:
-      responses:
-        200:
-          description: success message
-          content:
-            application.json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                example: "Hello, Welcome !!!"
   /register:
     post:
       tags:
@@ -110,7 +96,7 @@ paths:
             schema:
               $ref: '#/components/schemas/requestUpdate'
       responses:
-        201:
+        200:
           description: success updated user
           content:
             application.json:
@@ -128,15 +114,25 @@ paths:
       description: used to delete user
       summary: delete user
       security:
-        - jwt_auth: []
-      
+        - jwt_auth: []      
       responses:
-        201:
+        200:
           description: succes delete user
           content:
             application.json:
               schema:
-                $ref: '#/components/schemas/responseDelete'
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: integer
+                  message:
+                    type: string
+              example:
+                status: ok
+                code: 200
+                message: deleted successfully   
         404:
           $ref: '#/components/responses/notFoundResponse'
         500:
@@ -230,7 +226,7 @@ paths:
                 - img1.jpg
                 - img2.jpg              
       responses:
-        201:
+        200:
           description: success updated post
           content:
             application.json:
@@ -252,12 +248,23 @@ paths:
         - jwt_auth: []
       
       responses:
-        201:
+        200:
           description: succes delete post
           content:
             application.json:
               schema:
-                $ref: '#/components/schemas/responseDelete'
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: integer
+                  message:
+                    type: string
+              example:
+                status: ok
+                code: 200
+                message: deleted successfully   
         404:
           $ref: '#/components/responses/notFoundResponse'
         500:
@@ -330,7 +337,7 @@ paths:
       description: used to show all comments
       summary: get all comments
       responses: 
-        201:
+        200:
           description: succes get all comments
           content:
             application.json:
@@ -380,8 +387,8 @@ paths:
             example:
               comment: Nice !!!
       responses: 
-        201:
-          description: succes add comment
+        200:
+          description: succes edit comment
           content:
             application.json:
               schema: 
@@ -425,12 +432,23 @@ paths:
         - jwt_auth: []
       
       responses: 
-        201:
+        200:
           description: succes delete comment
           content:
             application.json:
               schema:
-                $ref: '#/components/schemas/responseDelete'      
+                type: object
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: integer
+                  message:
+                    type: string
+              example:
+                status: ok
+                code: 200
+                message: deleted successfully    
         404:
           $ref: '#/components/responses/notFoundResponse'
         500:
@@ -479,8 +497,6 @@ components:
                   type: string
                 email:
                   type: string
-            token:
-              type: string
             message:
               type: string
       example:
@@ -490,7 +506,6 @@ components:
           name: Myname
           username: MyUserName
           email: MyEmail@gmail.com
-        token: 12344567890qwertyuiop
         message: registered successfully
 
     requestLoginUser:
@@ -581,19 +596,12 @@ components:
       type: object
       example:
         status: ok
-        code: 201
+        code: 200
         data:
           name: Myname
           username: MyUserName
           email: MyEmail@gmail.com
-        token: 12344567890qwertyuiop
-        message: registered successfully
-    responseDelete:
-       type: object
-       example:
-        status: ok
-        code: 200
-        message: deleted successfully
+        message: updated successfully     
     requestPost:
       type: object
       properties:
@@ -714,18 +722,18 @@ components:
         code:
           type: integer
         data: 
-            type: array
-            items:
-              type: object
-              properties:
-                comment_id:
-                  type: integer
-                username:
-                  type: string
-                comment: 
-                  type: integer
-                created_at:
-                  type: string
+          type: array
+          items:
+            type: object
+            properties:
+              comment_id:
+                type: integer
+              username:
+                type: string
+              comment: 
+                type: integer
+              created_at:
+                type: string
         message:
           type: string      
   responses:
@@ -780,3 +788,4 @@ components:
               code: 500
               status: internal server error
               message: server error
+  
