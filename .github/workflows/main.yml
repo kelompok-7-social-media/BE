@@ -24,10 +24,10 @@ jobs:
       name: Build and push
       uses: docker/build-push-action@v3
       with:
-          context: .
-          file: ./dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_USER }}/project:latest          
+        context: .
+        file: ./dockerfile
+        push: true
+        tags: ${{ secrets.DOCKER_USER }}/project-images:latest          
     - 
       name: executing remote ssh commands using password
       uses: appleboy/ssh-action@v0.1.7
