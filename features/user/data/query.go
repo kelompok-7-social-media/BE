@@ -78,21 +78,21 @@ func (uq *userQuery) Update(id uint, updateData user.Core) (user.Core, error) {
 	return ToCore(userModel), nil
 }
 
-func (uq *userQuery) Update2(id uint, updateData user.Core) (user.Core, error) {
-	userModel := CoreToData(updateData)
-	userModel.ID = id
+// func (uq *userQuery) Update2(id uint, updateData user.Core) (user.Core, error) {
+// 	userModel := CoreToData(updateData)
+// 	userModel.ID = id
 
-	Input := uq.db.Where("id = ?", id).Updates(&userModel)
-	if Input.Error != nil {
-		log.Println("Get By ID query error", Input.Error.Error())
-		return user.Core{}, Input.Error
-	}
-	if Input.RowsAffected <= 0 {
-		return user.Core{}, errors.New("Not found")
-	}
+// 	Input := uq.db.Where("id = ?", id).Updates(&userModel)
+// 	if Input.Error != nil {
+// 		log.Println("Get By ID query error", Input.Error.Error())
+// 		return user.Core{}, Input.Error
+// 	}
+// 	if Input.RowsAffected <= 0 {
+// 		return user.Core{}, errors.New("Not found")
+// 	}
 
-	return ToCore(userModel), nil
-}
+// 	return ToCore(userModel), nil
+// }
 
 func (uq *userQuery) Delete(id uint) (user.Core, error) {
 	// users := User{}

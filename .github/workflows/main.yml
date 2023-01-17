@@ -27,7 +27,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USER }}/belajar:latest          
+          tags: ${{ secrets.DOCKER_USER }}/project:latest          
     - 
       name: executing remote ssh commands using password
       uses: appleboy/ssh-action@v0.1.7
@@ -37,7 +37,8 @@ jobs:
         key: ${{ secrets.KEY }}
         port: ${{ secrets.PORT }}
         script: |
-          docker rmi ${{ secrets.DOCKER_USER }}/belajar
-          docker pull ${{ secrets.DOCKER_USER }}/belajar
-          docker stop be14
-          docker rm be14
+          docker rmi project
+          docker pull project
+          docker stop socmed
+          docker rm socmed
+          docker run --name socmed -d -e DBUSER=root -e DBPASS="" -e DBHOST=mysqlku -e DBPORT=3306 -e DBNAME=databases-1 -e JWT_KEY="BEa|t3rr4" --link mysqlku socmed
