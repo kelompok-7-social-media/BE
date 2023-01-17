@@ -37,8 +37,9 @@ jobs:
         key: ${{ secrets.KEY }}
         port: ${{ secrets.PORT }}
         script: |
-          docker rmi project
-          docker pull project
-          docker stop socmed
-          docker rm socmed
-          docker run --name socmed -d -e DBUSER=root -e DBPASS="" -e DBHOST=mysqlku -e DBPORT=3306 -e DBNAME=databases-1 -e JWT_KEY="BEa|t3rr4" --link mysqlku socmed
+          git pull origin main
+          docker stop project 
+          docker rm project 
+          docker rmi project-images:latest
+          docker build -t project-images:latest
+          docker run --name socmed -d -p 80:8000 -e DBUSER=${{ secrets.DBUSER}} -e DBPASS=${{ secrets.DBPASS}} -e DBHOST=${{ secrets.DBHOST}} -e DBPORT=${{ secrets.DBPORT}} -e DBNAME=${{ secrets.DBNAME}} -e JWT_KEY=${{ secrets.JWT_KEY}} socmed
