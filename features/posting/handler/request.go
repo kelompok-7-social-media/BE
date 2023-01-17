@@ -3,8 +3,7 @@ package handler
 import "project/features/posting"
 
 type AddUpdatePostingRequest struct {
-	Postingan string `form:"postingan`
-	Image     string `form:"image"`
+	Postingan string `form:"postingan"`
 }
 
 func ToCore(data interface{}) *posting.Core {
@@ -14,7 +13,6 @@ func ToCore(data interface{}) *posting.Core {
 	case AddUpdatePostingRequest:
 		cnv := data.(AddUpdatePostingRequest)
 		res.Postingan = cnv.Postingan
-		res.Image = cnv.Image
 
 	default:
 		return nil

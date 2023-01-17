@@ -6,7 +6,8 @@ import (
 
 type Image struct {
 	gorm.Model
-	PostingID string
+	Url_Image string
+	PostingID uint
 }
 
 // func ToCore(data Books) book.Core {

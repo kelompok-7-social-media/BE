@@ -6,15 +6,12 @@ type PostingResponse struct {
 	ID        uint   `json:"id"`
 	Postingan string `json:"postingan"`
 	UserName  string `json:"username"`
-	Image     string `json:"image"`
 }
 type AddPostingResponse struct {
 	Postingan string `json:"postingan"`
-	Image     string `json:"image"`
 }
 type updatePostingResponse struct {
 	Postingan string `json:"postingan"`
-	Image     string `json:"image"`
 }
 
 func ToResponse(feature string, posting posting.Core) interface{} {
@@ -22,18 +19,15 @@ func ToResponse(feature string, posting posting.Core) interface{} {
 	case "add":
 		return AddPostingResponse{
 			Postingan: posting.Postingan,
-			Image:     posting.Image,
 		}
 	case "update":
 		return updatePostingResponse{
 			Postingan: posting.Postingan,
-			Image:     posting.Image,
 		}
 	default:
 		return PostingResponse{
 			ID:        posting.ID,
 			Postingan: posting.Postingan,
-			Image:     posting.Image,
 			UserName:  posting.UserName,
 		}
 	}
@@ -43,7 +37,6 @@ func ListBookCoreToBookRespon(dataCore posting.Core) PostingResponse { // data u
 	return PostingResponse{
 		ID:        dataCore.ID,
 		Postingan: dataCore.Postingan,
-		Image:     dataCore.Image,
 		UserName:  dataCore.UserName,
 	}
 }

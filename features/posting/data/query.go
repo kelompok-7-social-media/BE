@@ -20,6 +20,16 @@ func New(db *gorm.DB) posting.PostingData {
 	}
 }
 
-func (*postingData) Add(userID int, newPosting posting.Core) (posting.Core, error) {
-	panic("unimplemented")
+func (pd *postingData) Add(userID int, newPosting posting.Core) (posting.Core, error) {
+	cnv := CoreToData(newPosting)
+	cnv.UserID = uint(userID)
+
+	err := pd.db.Create(&cnv).Error
+	if err != nil {
+		return posting.Core{}, err
+	}
+
+	newPosting.ID = cnv.ID
+
+	return newPosting, nil
 }

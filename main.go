@@ -7,6 +7,10 @@ import (
 	"project/features/user/handler"
 	"project/features/user/services"
 
+	pd "project/features/posting/data"
+	phl "project/features/posting/handler"
+	psrv "project/features/posting/services"
+
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -21,6 +25,9 @@ func main() {
 	userSrv := services.New(userData)
 	userHdl := handler.New(userSrv)
 
+	postingData := pd.New(db)
+	postingSrv := psrv.New(postingData)
+	postingHdl := phl.New(postingSrv)
 	e.Pre(middleware.RemoveTrailingSlash())
 	e.Use(middleware.CORS())
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
@@ -35,6 +42,7 @@ func main() {
 
 	e.DELETE("/users", userHdl.Delete(), middleware.JWT([]byte(config.JWT_KEY)))
 
+	e.POST("/posting", postingHdl.Add(), middleware.JWT([]byte(config.JWT_KEY)))
 	if err := e.Start(":8000"); err != nil {
 		log.Println(err.Error())
 	}

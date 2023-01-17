@@ -10,8 +10,8 @@ type Core struct {
 	ID        uint
 	Postingan string `validate:"required"`
 	Image     string
-	UserName  string `validate:"required"`
-	Create_at time.Time
+	UserName  string
+	CreatedAt time.Time
 }
 
 type PostingHandler interface {
