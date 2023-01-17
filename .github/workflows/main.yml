@@ -24,10 +24,10 @@ jobs:
       name: Build and push
       uses: docker/build-push-action@v3
       with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_USER }}/project:latest          
+        context: .
+        file: ./dockerfile
+        push: true
+        tags: ${{ secrets.DOCKER_USER }}/project:latest          
     - 
       name: executing remote ssh commands using password
       uses: appleboy/ssh-action@v0.1.7
@@ -37,8 +37,9 @@ jobs:
         key: ${{ secrets.KEY }}
         port: ${{ secrets.PORT }}
         script: |
-          docker rmi project
-          docker pull project
-          docker stop socmed
-          docker rm socmed
-          docker run --name socmed -d -e DBUSER=root -e DBPASS="" -e DBHOST=mysqlku -e DBPORT=3306 -e DBNAME=databases-1 -e JWT_KEY="BEa|t3rr4" --link mysqlku socmed
+          git pull origin main 
+          docker rmi ${{ secrets.DOCKER_USER }}/project
+          docker pull ${{ secrets.DOCKER_USER }}/project
+          docker stop project 
+          docker rm project
+          docker run -d -p 8000:8000 -e SERVER_PORT=${{ secrets.SERVER_PORT }} -e DBUSER=${{ secrets.DBUSER }} -e DBPASS=${{ secrets.DBPASS }} -e DBHOST=${{ secrets.DBHOST }} -e DBPORT=${{ secrets.DBPORT }} -e DBNAME=${{ secrets.DBNAME }} --name project ${{ secrets.DOCKER_USER }}/project:latest 
