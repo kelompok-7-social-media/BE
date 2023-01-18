@@ -1,7 +1,10 @@
 package data
 
 import (
+	"errors"
+	"log"
 	"project/features/posting"
+	"strings"
 
 	"gorm.io/gorm"
 )
@@ -26,10 +29,31 @@ func (pd *postingData) Add(userID int, newPosting posting.Core) (posting.Core, e
 
 	err := pd.db.Create(&cnv).Error
 	if err != nil {
-		return posting.Core{}, err
+		log.Println("add post query error", err.Error())
+		msg := ""
+		if strings.Contains(err.Error(), "not valid") {
+			msg = "wrong input"
+
+		} else {
+			msg = "server error"
+		}
+		return posting.Core{}, errors.New(msg)
 	}
 
 	newPosting.ID = cnv.ID
 
 	return newPosting, nil
+}
+
+func (pd *postingData) Update(userID int, postID int, updatedData posting.Core) (posting.Core, error) {
+	return posting.Core{}, nil
+}
+func (pd *postingData) GetAllPost() ([]posting.Core, error) {
+	return []posting.Core{}, nil
+}
+func (pd *postingData) Delete(userID int, postID int) error {
+	return nil
+}
+func (pd *postingData) MyPost(userID int) ([]posting.Core, error) {
+	return []posting.Core{}, nil
 }
