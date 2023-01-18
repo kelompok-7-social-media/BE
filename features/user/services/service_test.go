@@ -146,8 +146,7 @@ func TestUpdate(t *testing.T) {
 
 	t.Run("sukses update data", func(t *testing.T) {
 		input := user.Core{Name: "herdi", Email: "herdiladania11@gmail.com", Username: "herdiladania11"}
-		passwordHashed, _ := helper.GeneratePassword("herdi123")
-		updatedData := user.Core{ID: uint(1), Name: "herdi", Email: "herdiladania11@gmail.com", Username: "herdiladania11", Password: passwordHashed}
+		updatedData := user.Core{ID: uint(1), Name: "herdi", Email: "herdiladania11@gmail.com", Username: "herdiladania11"}
 		repo.On("Update", uint(1), input).Return(updatedData, nil).Once()
 
 		service := New(repo)
@@ -155,27 +154,29 @@ func TestUpdate(t *testing.T) {
 		pToken := token.(*jwt.Token)
 		pToken.Valid = true
 		res, err := service.Update(pToken, input)
-		assert.Nil(t, err)
+		assert.NoError(t, err)
 		assert.Equal(t, updatedData.ID, res.ID)
-		assert.NotEqual(t, input.Name, res.Name)
-		assert.NotEqual(t, input.Email, res.Email)
-		assert.NotEqual(t, input.Username, res.Username)
+		assert.Equal(t, input.Name, res.Name)
+		assert.Equal(t, input.Email, res.Email)
+		assert.Equal(t, input.Username, res.Username)
 		repo.AssertExpectations(t)
 	})
+	t.Run("Input tidak sesuai format", func(t *testing.T) {
+		input := user.Core{
+			Email: "herdi",
+		}
+		repo.On("Update", uint(1), input).Return(user.Core{}, errors.New("input tidak sesuai")).Once()
 
-	t.Run("jwt tidak valid", func(t *testing.T) {
-		input := user.Core{Name: "herdi", Email: "herdiladania11@gmail.com", Username: "herdiladania11"}
 		service := New(repo)
-
-		_, token := helper.GenerateJWT(0)
+		_, token := helper.GenerateJWT(1)
 		pToken := token.(*jwt.Token)
 		pToken.Valid = true
 		res, err := service.Update(pToken, input)
 		assert.NotNil(t, err)
-		assert.ErrorContains(t, err, "not found")
+		assert.ErrorContains(t, err, "server")
 		assert.Equal(t, uint(0), res.ID)
+		repo.AssertExpectations(t)
 	})
-
 	t.Run("data tidak ditemukan", func(t *testing.T) {
 		input := user.Core{Name: "herdi", Email: "herdiladania11@gmail.com", Username: "herdiladania11"}
 		repo.On("Update", uint(5), input).Return(user.Core{}, errors.New("data not found")).Once()
