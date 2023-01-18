@@ -73,13 +73,11 @@ func (uc *userControll) Profile() echo.HandlerFunc {
 	}
 }
 
-// // Update implements user.UserHandler
 func (uc *userControll) Update() echo.HandlerFunc {
 	return func(c echo.Context) error {
 
 		ex := c.Get("user")
 
-		// id, _ := strconv.Atoi(c.Param("id"))
 		input := UpdateRequest{}
 		if err := c.Bind(&input); err != nil {
 			return c.JSON(http.StatusBadRequest, "format inputan salah")
@@ -96,7 +94,6 @@ func (uc *userControll) Update() echo.HandlerFunc {
 	}
 }
 
-// // Deactive implements user.UserHandler
 func (uc *userControll) Delete() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		tx := c.Get("user")
