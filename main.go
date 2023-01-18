@@ -3,9 +3,10 @@ package main
 import (
 	"log"
 	"project/config"
+
 	cd "project/features/komentar/data"
 	chl "project/features/komentar/handler"
-	csrv "project/features/komentar/service"
+	csrv "project/features/komentar/services"
 
 	"project/features/user/data"
 	"project/features/user/handler"

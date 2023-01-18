@@ -1,63 +1,56 @@
 package data
 
 import (
-	comment "project/features/komentar"
+	"project/features/komentar"
 
 	"gorm.io/gorm"
 )
 
-type Comment struct {
+type Komentar struct {
 	gorm.Model
-	Comment   string
+	Pesan     string
 	PostingID uint
 	UserID    uint
 }
 
-// type User struct {
-//     gorm.Model
-//     Name     string
-//     UserName string
-//     Comment  []Comment
+// type PostUser struct {
+// 	ID        uint
+// 	Postingan string
+// 	UserName  string
+// 	Image_url string
+// 	CreatedAt time.Time
 // }
 
-// type Comment struct {
-// 	gorm.Model
-// 	Comment   string
-// 	PostingID uint
-// 	UserID    uint
+func CoreToData(data komentar.Core) Komentar {
+	return Komentar{
+		Model:     gorm.Model{ID: data.ID},
+		Pesan:     data.Pesan,
+		PostingID: data.PostingID,
+	}
+}
+
+// func ToCore(data Posting) posting.Core {
+// 	return posting.Core{
+// 		ID:        data.ID,
+// 		Postingan: data.Postingan,
+// 		Image_url: data.Image_url,
+// 	}
 // }
 
-func ToCore(data Comment) comment.Core {
-	return comment.Core{
+// func DataToCore(data Posting) posting.Core {
+// 	return posting.Core{
+// 		ID:        data.ID,
+// 		Postingan: data.Postingan,
+// 		Image_url: data.Image_url,
+// 		UserName:  data.Image_url,
+// 		CreatedAt: data.CreatedAt,
+// 	}
+// }
+// func DataToCoreArr(data []Posting) []posting.Core {
+// 	var postArr = []posting.Core{}
+// 	for _, listOfPost := range data {
+// 		postArr = append(postArr, DataToCore(listOfPost))
+// 	}
 
-		ID: data.ID,
-		// Posting_ID: data.Posting_ID,
-		// User_ID:   data.User_ID,
-		Comment: data.Comment,
-	}
-}
-
-func (dataModel *Comment) ModelsToCore() comment.Core {
-	return comment.Core{
-
-		ID: dataModel.ID,
-		// Posting_ID: dataModel.Posting_ID,
-		// User_ID:   dataModel.User_ID,
-		Comment: dataModel.Comment,
-	}
-}
-func listModelToCore(dataModel []Comment) []comment.Core {
-	var dataCore []comment.Core
-	for _, v := range dataModel {
-		dataCore = append(dataCore, v.ModelsToCore())
-	}
-	return dataCore
-}
-func CoreToData(data comment.Core) Comment {
-	return Comment{
-		Model: gorm.Model{ID: data.ID},
-		// Posting_ID: data.Posting_ID,
-		// User_ID:   data.User_ID,
-		Comment: data.Comment,
-	}
-}
+// 	return postArr
+// }

@@ -1,18 +1,29 @@
 package handler
 
-import comment "project/features/komentar"
+import (
+	"project/features/komentar"
+)
 
-type AddCommentRequest struct {
-	Comment string `form:"comment"`
+type AddUpdateKomenRequest struct {
+	Pesan  string `form:"pesan"`
+	PostID uint   `form:"postid"`
 }
 
-func ToCore(data interface{}) *comment.Core {
-	res := comment.Core{}
+func (data *AddUpdateKomenRequest) reqToCore() komentar.Core {
+	return komentar.Core{
+		Pesan:     data.Pesan,
+		PostingID: data.PostID,
+	}
+}
+
+func ToCore(data interface{}) *komentar.Core {
+	res := komentar.Core{}
 
 	switch data.(type) {
-	case AddCommentRequest:
-		cnv := data.(AddCommentRequest)
-		res.Comment = cnv.Comment
+	case AddUpdateKomenRequest:
+		cnv := data.(AddUpdateKomenRequest)
+		res.Pesan = cnv.Pesan
+		res.PostingID = cnv.PostID
 
 	default:
 		return nil

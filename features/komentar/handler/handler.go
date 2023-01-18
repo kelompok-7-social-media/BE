@@ -1,66 +1,128 @@
 package handler
 
 import (
+	"fmt"
 	"log"
 	"net/http"
-	comment "project/features/komentar"
+	"project/features/komentar"
 	"project/helper"
 
 	"github.com/labstack/echo/v4"
 )
 
-type commentHandle struct {
-	srv comment.CommentService
+type komentarHandle struct {
+	srv komentar.KomentarService
 }
 
 // All implements book.BookHandler
 
-func New(cs comment.CommentService) comment.CommentHandler {
-	return &commentHandle{
-		srv: cs,
+func New(ps komentar.KomentarService) komentar.KomentarHandler {
+	return &komentarHandle{
+		srv: ps,
 	}
 }
-func (ch *commentHandle) Add() echo.HandlerFunc {
+
+// Add implements komentar.KomentarHandler
+func (kh *komentarHandle) Add() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		input := AddCommentRequest{}
+		input := AddUpdateKomenRequest{}
+		// idParam := c.Param("posting_id")
+		// id, _ := strconv.Atoi(idParam)
 		if err := c.Bind(&input); err != nil {
 			return c.JSON(http.StatusBadRequest, "format inputan salah")
 		}
+
 		cnv := ToCore(input)
 
-		res, err := ch.srv.Add(c.Get("user"), *cnv)
+		res, err := kh.srv.Add(c.Get("user"), *cnv)
+		fmt.Println(res)
 		if err != nil {
+			fmt.Println(err)
 			log.Println("trouble :  ", err.Error())
 			return c.JSON(helper.PrintErrorResponse(err.Error()))
 		}
+
 		posting := ToResponse("add", res)
 
-		return c.JSON(helper.PrintSuccessReponse(http.StatusCreated, "sukses menambahkan comment", posting))
+		return c.JSON(helper.PrintSuccessReponse(http.StatusCreated, "sukses menambahkan Komentar", posting))
 	}
 }
 
-// 		var comment CommentFormat
-// 		id_status := c.Param("id")
+// func (ph *postingHandle) Add() echo.HandlerFunc {
+// 	return func(c echo.Context) error {
+// 		input := AddUpdatePostingRequest{}
+// 		file, errPath := c.FormFile("file")
 
-// 		if err := c.Bind(&comment); err != nil {
-// 			c.JSON(http.StatusBadRequest, errors.New("Invalid Input From Client"))
-// 		}
+// 		fmt.Print("error get path handler, err = ", errPath)
 
-// 		idUser, _, role := middlewares.ExtractToken(c)
-// 		idCnv, _ := strconv.Atoi(id_status)
-// 		idStatus := uint(idCnv)
-// 		comment.IdStatus = idStatus
-// 		comment.ID_User = uint(idUser)
-// 		data := ToDomainComments(comment)
-// 		if role == "admin" {
-// 			return c.JSON(http.StatusBadRequest, FailedResponse("Invalid Input From Client"))
-// 		}
-// 		res, err1 := md.MenteeUsecase.Insert(data)
-// 		if err1 != nil {
-// 			log.Print(err1)
-// 			if strings.Contains(err1.Error(), "not found") {
-// 				return c.JSON(http.StatusBadRequest, FailedResponse("Not Found"))
+// 		if file != nil {
+// 			res, err := helper.UploadImage(c)
+// 			// fmt.Println(res)
+// 			if err != nil {
+// 				fmt.Println(err)
+// 				return errors.New("Create gambar Failed. Cannot Upload Data.")
 // 			}
-// 			return c.JSON(http.StatusBadRequest, FailedResponse("Not Found"))
+// 			input.Image_url = res
+// 			// fmt.Println(input.Image_url)
+// 		} else {
+// 			input.Image_url = "https://project3bucker.s3.ap-southeast-1.amazonaws.com/dummy-profile-pic.png"
 // 		}
-// 		return c.JSON(http.StatusCreated, SuccessResponse("success insert comment", ToResponseComments(res)))
+
+// 		if err := c.Bind(&input); err != nil {
+// 			return c.JSON(http.StatusBadRequest, "format inputan salah")
+// 		}
+
+// 		cnv := input.reqToCore()
+
+// 		res, err := ph.srv.Add(c.Get("user"), cnv)
+// 		if err != nil {
+// 			log.Println("trouble :  ", err.Error())
+// 			return c.JSON(helper.PrintErrorResponse(err.Error()))
+// 		}
+
+// 		posting := ToResponse("add", res)
+
+// 		return c.JSON(helper.PrintSuccessReponse(http.StatusCreated, "sukses menambahkan posting", posting))
+// 	}
+// }
+// func (ph *postingHandle) Update() echo.HandlerFunc {
+// 	return func(c echo.Context) error {
+// 		input := AddUpdatePostingRequest{}
+// 		file, errPath := c.FormFile("file")
+
+// 		fmt.Print("error get path handler, err = ", errPath)
+
+// 		if file != nil {
+// 			res, err := helper.UploadImage(c)
+// 			// fmt.Println(res)
+// 			if err != nil {
+// 				fmt.Println(err)
+// 				return errors.New("Create gambar Failed. Cannot Upload Data.")
+// 			}
+// 			input.Image_url = res
+// 			// fmt.Println(input.Image_url)
+// 		} else {
+// 			input.Image_url = "https://project3bucker.s3.ap-southeast-1.amazonaws.com/dummy-profile-pic.png"
+// 		}
+
+// 		if err := c.Bind(&input); err != nil {
+// 			return c.JSON(helper.PrintErrorResponse(err.Error()))
+// 		}
+// 		cnv := ToCore(input)
+
+// 		PostID, err := strconv.Atoi(c.Param("id"))
+// 		if err != nil {
+// 			return c.JSON(helper.PrintErrorResponse(err.Error()))
+// 		}
+
+// 		res, err := ph.srv.Update(c.Get("user"), PostID, *cnv)
+// 		if err != nil {
+// 			return c.JSON(helper.PrintErrorResponse(err.Error()))
+// 		}
+
+// 		posting := ToResponse("update", res)
+
+// 		return c.JSON(helper.PrintSuccessReponse(http.StatusOK, "sukses mengubah buku", posting))
+// 	}
+
+// }
