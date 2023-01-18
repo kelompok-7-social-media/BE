@@ -1,6 +1,7 @@
 package data
 
 import (
+	"project/features/komentar/data"
 	"project/features/posting"
 	"time"
 
@@ -11,7 +12,15 @@ type Posting struct {
 	gorm.Model
 	Postingan string
 	UserID    uint
+	Comments  []data.Comment `gorm:"foreignKey:PostingID;references:ID;constraint:OnDelete:CASCADE"`
+	// Image     []data.Images
 	Image_url string
+}
+
+type Comment struct {
+	PostingID uint
+	UserID    uint
+	Comment   string
 }
 
 type PostUser struct {
