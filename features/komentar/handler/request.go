@@ -4,18 +4,18 @@ import (
 	"project/features/komentar"
 )
 
-type AddUpdateKomenRequest struct {
-	Pesan  string `form:"pesan"`
-	PostID uint   `form:"postid"`
+type AddKomenRequest struct {
+	Comment string `form:"comment"`
+	PostID  uint   `form:"postid"`
 }
 type UpdateKomenRequest struct {
 	Pesan  string `form:"pesan"`
 	PostID uint   `form:"postid"`
 }
 
-func (data *AddUpdateKomenRequest) reqToCore() komentar.Core {
+func (data *AddKomenRequest) reqToCore() komentar.Core {
 	return komentar.Core{
-		Pesan:     data.Pesan,
+		Comment:   data.Comment,
 		PostingID: data.PostID,
 	}
 }
@@ -24,9 +24,9 @@ func ToCore(data interface{}) *komentar.Core {
 	res := komentar.Core{}
 
 	switch data.(type) {
-	case AddUpdateKomenRequest:
-		cnv := data.(AddUpdateKomenRequest)
-		res.Pesan = cnv.Pesan
+	case AddKomenRequest:
+		cnv := data.(AddKomenRequest)
+		res.Comment = cnv.Comment
 		res.PostingID = cnv.PostID
 
 	default:

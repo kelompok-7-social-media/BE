@@ -1,39 +1,31 @@
 package komentar
 
 import (
-	"time"
-
 	"github.com/labstack/echo/v4"
 )
 
 type Core struct {
 	ID        uint
-	Pesan     string `validate:"required"`
+	Comment   string `validate:"required"`
 	UserID    uint
 	PostingID uint
-	CreatedAt time.Time
+	CreatedAt string
 }
 
 type KomentarHandler interface {
 	Add() echo.HandlerFunc
-	Update() echo.HandlerFunc
-	// GetAllPost() echo.HandlerFunc
-	// Delete() echo.HandlerFunc
-	// MyPost() echo.HandlerFunc
+	GetCommentsByPost() echo.HandlerFunc
+	Delete() echo.HandlerFunc
 }
 
 type KomentarService interface {
-	Add(token interface{}, newKomen Core) (Core, error)
-	Update(token interface{}, komenID int, postID int, updatedData Core) (Core, error)
-	// GetAllPost() ([]Core, error)
-	// Delete(token interface{}, bookID int) error
-	// MyPost(token interface{}) ([]Core, error)
+	Add(token interface{}, newComment Core) (Core, error)
+	GetCommentsByPost(postID int) ([]Core, error)
+	Delete(token interface{}, postID int, commentID int) error
 }
 
 type KomentarData interface {
-	Add(userID int, newKomen Core) (Core, error)
-	Update(userID int, komenID int, postID int, updatedData Core) (Core, error)
-	// GetAllPost() ([]Core, error)
-	// Delete(userID int, bookID int) error
-	// MyPost(userID int) ([]Core, error)
+	Add(userID int, newComment Core) (Core, error)
+	GetCommentsByPost(postID int) ([]Core, error)
+	Delete(UserID int, postID int, commentID int) error
 }

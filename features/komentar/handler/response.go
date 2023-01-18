@@ -2,23 +2,22 @@ package handler
 
 import (
 	"project/features/komentar"
-	"time"
 )
 
 type KomentarResponse struct {
-	ID        uint      `json:"id"`
-	Pesan     string    `json:"pesan"`
-	PostingID uint      `json:"posting_id"`
-	CreatedAt time.Time `json:"tanggal"`
+	ID        uint   `json:"id"`
+	Comment   string `json:"comment"`
+	PostingID uint   `json:"posting_id"`
+	CreatedAt string `json:"tanggal"`
 }
 type AddKomentarResponse struct {
-	Pesan     string    `json:"pesan"`
-	PostingID uint      `json:"posting_id"`
-	CreatedAt time.Time `json:"tanggal"`
+	Comment   string `json:"comment"`
+	PostingID uint   `json:"posting_id"`
+	CreatedAt string `json:"tanggal"`
 }
 
 type updatePostingResponse struct {
-	Pesan     string `json:"pesan"`
+	Comment   string `json:"comment"`
 	PostingID uint   `json:"posting_id"`
 }
 
@@ -26,38 +25,39 @@ func ToResponse(feature string, komentar komentar.Core) interface{} {
 	switch feature {
 	case "add":
 		return AddKomentarResponse{
-			Pesan:     komentar.Pesan,
+			Comment:   komentar.Comment,
 			CreatedAt: komentar.CreatedAt,
 			PostingID: komentar.PostingID,
 		}
 	case "update":
 		return updatePostingResponse{
-			Pesan: komentar.Pesan,
+			Comment: komentar.Comment,
 
 			PostingID: komentar.PostingID,
 		}
 	default:
 		return KomentarResponse{
 			ID:        komentar.ID,
-			Pesan:     komentar.Pesan,
+			Comment:   komentar.Comment,
 			CreatedAt: komentar.CreatedAt,
 			PostingID: komentar.PostingID,
 		}
 	}
 }
 
-// func ListBookCoreToBookRespon(dataCore posting.Core) PostingResponse { // data user core yang ada di controller yang memanggil user repository
-// 	return PostingResponse{
-// 		ID:        dataCore.ID,
-// 		Postingan: dataCore.Postingan,
-// 		UserName:  dataCore.UserName,
-// 	}
-// }
-// func ListBookCoreToBooksRespon(dataCore []posting.Core) []PostingResponse {
-// 	var ResponData []PostingResponse
+func ListCommentCoreToCommentRespon(dataCore komentar.Core) KomentarResponse { // data user core yang ada di controller yang memanggil user repository
+	return KomentarResponse{
+		ID:        dataCore.ID,
+		Comment:   dataCore.Comment,
+		PostingID: dataCore.PostingID,
+		CreatedAt: dataCore.CreatedAt,
+	}
+}
+func ListCommentCoreToCommentsRespon(dataCore []komentar.Core) []KomentarResponse {
+	var ResponData []KomentarResponse
 
-// 	for _, value := range dataCore {
-// 		ResponData = append(ResponData, ListBookCoreToBookRespon(value))
-// 	}
-// 	return ResponData
-// }
+	for _, value := range dataCore {
+		ResponData = append(ResponData, ListCommentCoreToCommentRespon(value))
+	}
+	return ResponData
+}

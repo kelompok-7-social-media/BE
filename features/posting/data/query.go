@@ -50,7 +50,7 @@ func (pd *postingData) Update(userID int, postID int, updatedData posting.Core) 
 	cnv := CoreToData(updatedData)
 
 	// DB Update(value)
-	tx := pd.db.Where("id = ? && user_id = ?", postID, userID).Updates(&cnv)
+	tx := pd.db.Where("id = ? AND user_id = ?", postID, userID).Updates(&cnv)
 	if tx.Error != nil {
 		log.Println("update book query error :", tx.Error)
 		return posting.Core{}, tx.Error
@@ -79,9 +79,9 @@ func (pd *postingData) GetAllPost() ([]posting.Core, error) {
 }
 func (pd *postingData) Delete(userID int, postID int) error {
 	var record Posting
-	err := pd.db.Where("id = ? && user_id = ?", postID, userID).Delete(&record).Error
+	err := pd.db.Where("id = ? AND user_id = ?", postID, userID).Delete(&record).Error
 	if err != nil {
-		log.Println("delete book query error :", err.Error())
+		log.Println("delete post query error :", err.Error())
 		return err
 	}
 	return nil
