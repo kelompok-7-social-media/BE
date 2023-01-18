@@ -36,8 +36,8 @@ func (_m *UserData) AllUser() ([]user.Core, error) {
 	return r0, r1
 }
 
-// Deactive provides a mock function with given fields: id
-func (_m *UserData) Deactive(id uint) (user.Core, error) {
+// Delete provides a mock function with given fields: id
+func (_m *UserData) Delete(id uint) (user.Core, error) {
 	ret := _m.Called(id)
 
 	var r0 user.Core
