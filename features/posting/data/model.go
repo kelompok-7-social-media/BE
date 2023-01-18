@@ -39,6 +39,14 @@ func DataToCore(data Posting) posting.Core {
 		CreatedAt: data.CreatedAt,
 	}
 }
+func DataToCoreArr(data []Posting) []posting.Core {
+	var postArr = []posting.Core{}
+	for _, listOfPost := range data {
+		postArr = append(postArr, DataToCore(listOfPost))
+	}
+
+	return postArr
+}
 
 // func ToCoreSlice(data []posting.Core) []Image {
 // 	images := []Image{}
