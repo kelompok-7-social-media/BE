@@ -14,14 +14,14 @@ servers:
     url: http://localhost:8000/
 
 tags:
-  - name: user
-  - name: post
-  - name: comment
+  - name: users
+  - name: posts
+  - name: comments
 paths:
   /register:
     post:
       tags:
-        - "user"
+        - "users"
       description: used to register users
       summary: register users
       requestBody:
@@ -44,7 +44,7 @@ paths:
   /login:
     post:
       tags:
-        - "user"
+        - "users"
       description: used to login
       summary: login user
       requestBody:
@@ -66,7 +66,7 @@ paths:
   /user:
     get:
       tags:
-        - "user"
+        - "users"
       description: used to show profile
       summary: show user profile
       security:
@@ -85,7 +85,7 @@ paths:
 
     put:
       tags:
-        - "user"
+        - "users"
       description: used for update user data
       summary: update user
       security:
@@ -110,7 +110,7 @@ paths:
           $ref: '#/components/responses/serverErrorResponse'
     delete:
       tags:
-        - "user"
+        - "users"
       description: used to delete user
       summary: delete user
       security:
@@ -123,15 +123,9 @@ paths:
               schema:
                 type: object
                 properties:
-                  status:
-                    type: string
-                  code:
-                    type: integer
                   message:
                     type: string
               example:
-                status: ok
-                code: 200
                 message: deleted successfully   
         404:
           $ref: '#/components/responses/notFoundResponse'
@@ -140,7 +134,7 @@ paths:
   /post:
     get:
       tags:
-        - "post"
+        - "posts"
       description: used to show all posts
       summary: get all posts
 
@@ -157,14 +151,14 @@ paths:
           $ref: '#/components/responses/serverErrorResponse'
     post:
       tags:
-        - "post"
+        - "posts"
       description: used to add new post
       summary: add new post
       security:
         - jwt_auth: []
       requestBody:
         content:
-          application.json:
+          multipart/form-data:
             schema:
               $ref: '#/components/schemas/requestPost'
             example:
@@ -184,40 +178,23 @@ paths:
         500:
           $ref: '#/components/responses/serverErrorResponse'
 
-  /post/{post_id}:
+  /posts/{post_id}:
     parameters:
         - name: post_id
           in: path
           required: true
           schema: 
             type: integer
-    get:
-      tags:
-        - "post"
-
-      description: used to show post by id
-      summary: get post by id
-      responses: 
-        200:
-          description: Success get all post
-          content:
-            application.json:
-              schema:
-                $ref: '#/components/schemas/responsePost'
-        404:
-          $ref: '#/components/responses/notFoundResponse'
-        500:
-          $ref: '#/components/responses/serverErrorResponse'
     put:
       tags:
-        - "post"
+        - "posts"
       description: used for update post 
       summary: update post
       security:
         - jwt_auth: []
       requestBody:
         content:
-          application.json:
+          multipart/form-data:
             schema:
               $ref: '#/components/schemas/requestPost'
             example:
@@ -241,7 +218,7 @@ paths:
           $ref: '#/components/responses/serverErrorResponse'
     delete:
       tags:
-        - "post"
+        - "posts"
       description: used to delete post
       summary: delete post
       security:
@@ -255,30 +232,19 @@ paths:
               schema:
                 type: object
                 properties:
-                  status:
-                    type: string
-                  code:
-                    type: integer
                   message:
                     type: string
               example:
-                status: ok
-                code: 200
                 message: deleted successfully   
         404:
           $ref: '#/components/responses/notFoundResponse'
         500:
           $ref: '#/components/responses/serverErrorResponse'
-  /comment/{post_id}:
-    parameters:
-        - name: post_id
-          in: path
-          required: true
-          schema: 
-            type: integer
+          
+  /comment:
     post:
       tags:
-        - "comment"
+        - "comments"
       description: used to add comments
       summary: add comments
       security:
@@ -289,9 +255,12 @@ paths:
             schema:
               type: object
               properties:
+                post_id:
+                  type: integer
                 comment:
                   type: string
             example:
+              post_id: 1
               comment: Nice !!!
 
       responses: 
@@ -302,13 +271,11 @@ paths:
               schema: 
                 type: object
                 properties:
-                  status: 
-                    type: string
-                  code: 
-                    type: integer
                   data:
                     type: object
                     properties:
+                      post_id:
+                        type: integer
                       comment_id:
                         type: integer
                       comment: 
@@ -318,9 +285,8 @@ paths:
                   message:
                     type: string
               example:
-                status: ok
-                code: 200
                 data: 
+                  post_id: 1
                   comment_id: 1
                   comment: Nice !!!
                   created_at: "01-01-2023"
@@ -331,9 +297,17 @@ paths:
           $ref: '#/components/responses/notFoundResponse'
         500:
           $ref: '#/components/responses/serverErrorResponse'
+  
+  /comments/{post_id}:
+    parameters:
+        - name: post_id
+          in: path
+          required: true
+          schema: 
+            type: integer
     get:
       tags:
-        - "comment"
+        - "comments"
       description: used to show all comments
       summary: get all comments
       responses: 
@@ -344,8 +318,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/responseGetAllComment'  
               example:
-                status: ok
-                code : 200
                 data:
                   - comment_id: 1
                     username: herdiladania11
@@ -364,7 +336,7 @@ paths:
           $ref: '#/components/responses/notFoundResponse'
         500:
           $ref: '#/components/responses/serverErrorResponse'
-  /comment/{comment_id}:
+  /comments/{comment_id}:
     parameters:
         - name: comment_id
           in: path
@@ -373,7 +345,7 @@ paths:
             type: integer
     put:
       tags:
-        - "comment"
+        - "comments"
       description: used to edit comments
       summary: edit comments
       requestBody:
@@ -394,10 +366,6 @@ paths:
               schema: 
                 type: object
                 properties:
-                  status: 
-                    type: string
-                  code: 
-                    type: integer
                   data:
                     type: object
                     properties:
@@ -410,8 +378,6 @@ paths:
                   message:
                     type: string
               example:
-                status: ok
-                code: 200
                 data: 
                   comment_id: 1
                   comment: Nice Bro !!!
@@ -425,7 +391,7 @@ paths:
           $ref: '#/components/responses/serverErrorResponse'
     delete:
       tags:
-        - "comment"
+        - "comments"
       description: used to delete comments
       summary: delete comments
       security:
@@ -439,15 +405,9 @@ paths:
               schema:
                 type: object
                 properties:
-                  status:
-                    type: string
-                  code:
-                    type: integer
                   message:
                     type: string
               example:
-                status: ok
-                code: 200
                 message: deleted successfully    
         404:
           $ref: '#/components/responses/notFoundResponse'
@@ -481,10 +441,6 @@ components:
     responseRegisterUser:
       type: object
       properties:
-        status:
-          type: string
-        code:
-          type: integer
         data:
           type: object
           properties:
@@ -500,8 +456,6 @@ components:
             message:
               type: string
       example:
-        status: ok
-        code: 201
         data:
           name: Myname
           username: MyUserName
@@ -521,10 +475,6 @@ components:
     responseLoginUser:
       type: object
       properties:
-        status:
-          type: string
-        code:
-          type: integer
         data:
           type: object
           properties:
@@ -542,8 +492,6 @@ components:
         message:
           type: string
       example:
-        status: ok
-        code: 200
         data:
           name: MyName
           username: MyUserName
@@ -553,10 +501,6 @@ components:
     responseProfile:
       type: object
       properties:
-        status:
-          type: string
-        code:
-          type: integer
         data:
           type: object
           properties:
@@ -569,8 +513,6 @@ components:
         message:
           type: string
       example:
-        status: ok
-        code: 200
         data:
           name: Myname
           username: MyUserName
@@ -595,8 +537,6 @@ components:
     responseUpdateUser:
       type: object
       example:
-        status: ok
-        code: 200
         data:
           name: Myname
           username: MyUserName
@@ -614,17 +554,11 @@ components:
     responseAddPost:
       type: object
       properties:
-        status: 
-          type: string
-        code:
-          type: integer
         data: 
             type: object
         message:
           type: string     
       example:
-        status: ok
-        code: 200
         data: 
           post_id: 1
           username: herdiladania11
@@ -637,10 +571,6 @@ components:
     responsePostArr:
       type: object
       properties:
-        status: 
-          type: string
-        code:
-          type: integer
         data: 
           type: array
           items:
@@ -648,8 +578,6 @@ components:
         message:
           type: string
       example:
-        status: ok
-        code: 200
         data: 
           - post_id: 1
             username: herdiladania11
@@ -670,42 +598,14 @@ components:
             created_at: "05-01-2023"
             photos: ""
         message: successfully get all posts
-    responsePost:
-      type: object
-      properties:
-        status: 
-          type: string
-        code:
-          type: integer
-        data: 
-            type: object
-        message:
-          type: string     
-      example:
-        status: ok
-        code: 200
-        data: 
-          post_id: 1
-          username: herdiladania11
-          description: Happy New Year
-          created_at: "01-01-2023"
-          photos:
-              - img1.jpg
-        message: successfully get post by id
     responseUpdatePost:
       type: object
       properties:
-        status: 
-          type: string
-        code:
-          type: integer
         data: 
             type: object
         message:
           type: string     
       example:
-        status: ok
-        code: 200
         data: 
           post_id: 1
           username: herdiladania11
@@ -717,10 +617,6 @@ components:
     responseGetAllComment:
       type: object
       properties:
-        status: 
-          type: string
-        code:
-          type: integer
         data: 
           type: array
           items:
@@ -744,15 +640,9 @@ components:
           schema:
             type: object
             properties:
-              code:
-                type: integer
-              status:
-                type: string
               message:
                 type: string
             example:
-              code: 400
-              status: bad request
               message: input invalid
     notFoundResponse:
       description: Not Found
@@ -761,15 +651,9 @@ components:
           schema:
             type: object
             properties:
-              code:
-                type: integer
-              status:
-                type: string
               message:
                 type: string
             example:
-              code: 404
-              status: not found
               message: data not Found
     serverErrorResponse:
       description: Internal Server Error
@@ -778,14 +662,7 @@ components:
           schema:
             type: object
             properties:
-              code:
-                type: integer
-              status:
-                type: string
               message:
                 type: string
             example:
-              code: 500
-              status: internal server error
               message: server error
-  
