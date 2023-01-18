@@ -1,6 +1,9 @@
 package handler
 
-import "project/features/posting"
+import (
+	"project/features/posting"
+	"time"
+)
 
 type PostingResponse struct {
 	ID        uint   `json:"id"`
@@ -8,7 +11,8 @@ type PostingResponse struct {
 	UserName  string `json:"username"`
 }
 type AddPostingResponse struct {
-	Postingan string `json:"postingan"`
+	Postingan string    `json:"postingan"`
+	CreatedAt time.Time `json:"tanggal"`
 }
 type updatePostingResponse struct {
 	Postingan string `json:"postingan"`
@@ -19,6 +23,7 @@ func ToResponse(feature string, posting posting.Core) interface{} {
 	case "add":
 		return AddPostingResponse{
 			Postingan: posting.Postingan,
+			CreatedAt: posting.CreatedAt,
 		}
 	case "update":
 		return updatePostingResponse{

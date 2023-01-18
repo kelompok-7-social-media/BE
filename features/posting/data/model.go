@@ -25,7 +25,7 @@ type PostUser struct {
 	Postingan string
 	UserName  string
 	Image_url string
-	CreateAt  time.Time
+	CreatedAt time.Time
 }
 
 func CoreToData(data posting.Core) Posting {
