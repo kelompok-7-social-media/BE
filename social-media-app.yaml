@@ -63,21 +63,21 @@ paths:
           $ref: '#/components/responses/badRequestResponse'
         500:
           $ref: '#/components/responses/serverErrorResponse'
-  /user:
+  /users:
     get:
       tags:
         - "users"
-      description: used to show profile
-      summary: show user profile
+      description: used to show all user
+      summary: getall users
       security:
         - jwt_auth: []      
       responses:
         200:
-          description: success show user profile
+          description: successfully get all users
           content:
             application.json:
               schema:
-                $ref: '#/components/schemas/responseProfile'
+                $ref: '#/components/schemas/responseGetAllUser'
         404:
           $ref: '#/components/responses/notFoundResponse'
         500:
@@ -131,7 +131,32 @@ paths:
           $ref: '#/components/responses/notFoundResponse'
         500:
           $ref: '#/components/responses/serverErrorResponse'
-  /post:
+  /users/{id}:
+    parameters:
+        - name: id
+          in: path
+          required: true
+          schema: 
+            type: integer
+    get:
+      tags:
+        - "users"
+      description: used to show profile
+      summary: show user profile
+      security:
+        - jwt_auth: []      
+      responses:
+        200:
+          description: success show user profile
+          content:
+            application.json:
+              schema:
+                $ref: '#/components/schemas/responseProfile'
+        404:
+          $ref: '#/components/responses/notFoundResponse'
+        500:
+          $ref: '#/components/responses/serverErrorResponse'
+  /posts:
     get:
       tags:
         - "posts"
@@ -165,7 +190,6 @@ paths:
               description: Happy New Year
               photos:
                 - img1.jpg
-                - img2.jpg
       responses: 
         200:
           description: Success add new post
@@ -177,7 +201,30 @@ paths:
           $ref: '#/components/responses/notFoundResponse'
         500:
           $ref: '#/components/responses/serverErrorResponse'
+  /posts/{user_id}:
+    parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema: 
+            type: integer
+    get:
+      tags:
+        - "posts"
+      description: used to show all myposts
+      summary: get all myposts
 
+      responses: 
+        200:
+          description: Success get all mypost
+          content:
+            application.json:
+              schema:
+                $ref: '#/components/schemas/responsePostArr'
+        404:
+          $ref: '#/components/responses/notFoundResponse'
+        500:
+          $ref: '#/components/responses/serverErrorResponse'
   /posts/{post_id}:
     parameters:
         - name: post_id
@@ -201,7 +248,6 @@ paths:
               description: My First Project
               photos:
                 - img1.jpg
-                - img2.jpg              
       responses:
         200:
           description: success updated post
@@ -241,7 +287,7 @@ paths:
         500:
           $ref: '#/components/responses/serverErrorResponse'
           
-  /comment:
+  /comments:
     post:
       tags:
         - "comments"
@@ -332,59 +378,6 @@ paths:
                     comment: XD
                     created_at: "12-01-2023"
                 message: successfully show comments
-        404:
-          $ref: '#/components/responses/notFoundResponse'
-        500:
-          $ref: '#/components/responses/serverErrorResponse'
-  /comments/{comment_id}:
-    parameters:
-        - name: comment_id
-          in: path
-          required: true
-          schema: 
-            type: integer
-    put:
-      tags:
-        - "comments"
-      description: used to edit comments
-      summary: edit comments
-      requestBody:
-        content:
-          application.json:
-            schema:
-              type: object
-              properties:
-                comment:
-                  type: string
-            example:
-              comment: Nice !!!
-      responses: 
-        200:
-          description: succes edit comment
-          content:
-            application.json:
-              schema: 
-                type: object
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      comment_id:
-                        type: integer
-                      comment: 
-                        type: string
-                      created_at:
-                        type: string
-                  message:
-                    type: string
-              example:
-                data: 
-                  comment_id: 1
-                  comment: Nice Bro !!!
-                  updated_at: "13-01-2023"
-                message: successfully edited comment  
-        400 :
-          $ref: '#/components/responses/badRequestResponse'              
         404:
           $ref: '#/components/responses/notFoundResponse'
         500:
@@ -487,8 +480,8 @@ components:
                   type: string
                 email:
                   type: string 
-        token:
-          type: string
+                token:
+                  type: string
         message:
           type: string
       example:
@@ -496,7 +489,7 @@ components:
           name: MyName
           username: MyUserName
           email: MyEmail@gmail.com
-        token: 12344567890qwertyuiop
+          token: 12344567890qwertyuiop
         message: login successfully
     responseProfile:
       type: object
@@ -518,6 +511,21 @@ components:
           username: MyUserName
           email: MyEmail@gmail.com
         message: Show profile successfully
+    responseGetAllUser:
+      type: object
+      properties:
+        data: 
+          type: array
+          items:
+            type: object
+        message:
+          type: string
+      example:
+        data:
+          - name: Myname
+            username: MyUserName
+            email: MyEmail@gmail.com
+        message: succesfully show all users
     requestUpdate:
       type: object
       properties:
@@ -566,7 +574,6 @@ components:
           created_at: "01-01-2023"
           photos:
               - img1.jpg
-              - img2.jpg
         message: successfully add new post
     responsePostArr:
       type: object
@@ -591,13 +598,12 @@ components:
             created_at: "05-01-2023"
             photos:
               - img1.jpg
-              - img2.jpg
           - post_id: 3
             username: RischiYuda
             description: "Coding, sometimes called computer programming, is how we communicate with computers. Code tells a computer what actions to take, and writing code is like creating a set of instructions. By learning to write code, you can tell computers what to do or how to behave in a much faster way. You can use this skill to make websites and apps, process data, and do lots of other cool things."
             created_at: "05-01-2023"
             photos: ""
-        message: successfully get all posts
+        message: successfully get posts
     responseUpdatePost:
       type: object
       properties:

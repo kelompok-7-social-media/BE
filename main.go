@@ -51,11 +51,11 @@ func main() {
 	e.PUT("/users", userHdl.Update(), middleware.JWT([]byte(config.JWT_KEY)))
 	e.DELETE("/users", userHdl.Delete(), middleware.JWT([]byte(config.JWT_KEY)))
 
-	e.POST("/post", postingHdl.Add(), middleware.JWT([]byte(config.JWT_KEY)))
-	e.GET("/post", postingHdl.GetAllPost())
-	e.PUT("/post/:id", postingHdl.Update(), middleware.JWT([]byte(config.JWT_KEY)))
-	e.GET("/post/:id", postingHdl.MyPost(), middleware.JWT([]byte(config.JWT_KEY)))
-	e.DELETE("/posting", postingHdl.Delete(), middleware.JWT([]byte(config.JWT_KEY)))
+	e.POST("/posts", postingHdl.Add(), middleware.JWT([]byte(config.JWT_KEY)))
+	e.GET("/posts", postingHdl.GetAllPost())
+	e.PUT("/posts/:id", postingHdl.Update(), middleware.JWT([]byte(config.JWT_KEY)))
+	e.GET("/posts/:id", postingHdl.MyPost(), middleware.JWT([]byte(config.JWT_KEY)))
+	e.DELETE("/posts", postingHdl.Delete(), middleware.JWT([]byte(config.JWT_KEY)))
 
 	e.POST("/comment", commentHdl.Add(), middleware.JWT([]byte(config.JWT_KEY)))
 	// e.PUT("/comment/:id", commentHdl.Update(), middleware.JWT([]byte(config.JWT_KEY)))
