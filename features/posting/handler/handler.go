@@ -36,7 +36,7 @@ func (ph *postingHandle) Add() echo.HandlerFunc {
 			// fmt.Println(res)
 			if err != nil {
 				fmt.Println(err)
-				return errors.New("Create gambar Failed. Cannot Upload Data.")
+				return errors.New("create gambar failed cannot upload data")
 			}
 			input.Image_url = res
 			// fmt.Println(input.Image_url)
@@ -73,7 +73,7 @@ func (ph *postingHandle) Update() echo.HandlerFunc {
 			// fmt.Println(res)
 			if err != nil {
 				fmt.Println(err)
-				return errors.New("Create gambar Failed. Cannot Upload Data.")
+				return errors.New("create gambar failed cannot upload data")
 			}
 			input.Image_url = res
 			// fmt.Println(input.Image_url)
@@ -103,11 +103,32 @@ func (ph *postingHandle) Update() echo.HandlerFunc {
 
 }
 func (ph *postingHandle) GetAllPost() echo.HandlerFunc {
-	return func(c echo.Context) error { return c.JSON(http.StatusBadRequest, "format inputan salah") }
+	return func(c echo.Context) error {
+		result, _ := ph.srv.GetAllPost()
+
+		listRes := ListPostCoreToPostsRespon(result)
+		return c.JSON(helper.PrintSuccessReponse(http.StatusOK, "sukses menampilkan  post", listRes))
+	}
 }
 func (ph *postingHandle) Delete() echo.HandlerFunc {
-	return func(c echo.Context) error { return c.JSON(http.StatusBadRequest, "format inputan salah") }
+	return func(c echo.Context) error {
+		postID, _ := strconv.Atoi(c.Param("id"))
+
+		del := ph.srv.Delete(c.Get("user"), postID)
+		if del != nil {
+			return c.JSON(helper.PrintErrorResponse(del.Error()))
+		}
+
+		return c.JSON(helper.PrintSuccessReponse(http.StatusOK, "sukses menghapus postingan"))
+	}
 }
 func (ph *postingHandle) MyPost() echo.HandlerFunc {
-	return func(c echo.Context) error { return c.JSON(http.StatusBadRequest, "format inputan salah") }
+	return func(c echo.Context) error {
+
+		res, _ := ph.srv.MyPost(c.Get("user"))
+
+		listRes := ListPostCoreToPostsRespon(res)
+
+		return c.JSON(helper.PrintSuccessReponse(http.StatusOK, "sukses menampilkan postingan saya", listRes))
+	}
 }
