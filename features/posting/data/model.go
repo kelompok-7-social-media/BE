@@ -14,6 +14,7 @@ type Posting struct {
 	UserID    uint
 	Comments  []data.Comment `gorm:"foreignKey:PostingID;references:ID;constraint:OnDelete:CASCADE"`
 	// Image     []data.Images
+	Image_url string
 }
 
 type Comment struct {
