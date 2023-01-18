@@ -16,10 +16,6 @@ type komentarSrv struct {
 	validasi *validator.Validate
 }
 
-// Delete implements book.BookService
-
-// Update implements book.BookService
-
 func New(pd komentar.KomentarData) komentar.KomentarService {
 	return &komentarSrv{
 		data:     pd,
@@ -48,7 +44,7 @@ func (ks *komentarSrv) Add(token interface{}, newKomen komentar.Core) (komentar.
 		// fmt.Println(err)
 		msg := ""
 		if strings.Contains(err.Error(), "not found") {
-			msg = "Posting not found"
+			msg = "Komentar not found"
 		} else {
 			msg = "internal server error"
 		}
@@ -58,61 +54,27 @@ func (ks *komentarSrv) Add(token interface{}, newKomen komentar.Core) (komentar.
 	return res, nil
 }
 
-// // Add implements posting.PostingService
-// func (ps *postingSrv) Add(token interface{}, newPosting posting.Core) (posting.Core, error) {
-// 	userID := helper.ExtractToken(token)
-// 	if userID <= 0 {
-// 		return posting.Core{}, errors.New("user not found")
-// 	}
+// Update implements komentar.KomentarService
+func (ks *komentarSrv) Update(token interface{}, komenID int, postID int, updatedData komentar.Core) (komentar.Core, error) {
+	userID := helper.ExtractToken(token)
+	if userID <= 0 {
+		return komentar.Core{}, errors.New("id user not found")
+	}
+	if validasieror := ks.validasi.Struct(updatedData); validasieror != nil {
+		return komentar.Core{}, nil
+	}
 
-// 	// err := ps.validasi.Struct(newPosting)
-// 	// if err != nil {
-// 	// 	if _, ok := err.(*validator.InvalidValidationError); ok {
-// 	// 		log.Println(err)
-// 	// 	}
-// 	// 	return posting.Core{}, errors.New("validation error")
-// 	// }
+	res, err := ks.data.Update(userID, komenID, postID, updatedData)
+	if err != nil {
+		fmt.Println(err)
+		msg := ""
+		if strings.Contains(err.Error(), "not found") {
+			msg = "komentar not found"
+		} else {
+			msg = "internal server error"
+		}
+		return komentar.Core{}, errors.New(msg)
+	}
 
-// 	res, err := ps.data.Add(userID, newPosting)
-// 	fmt.Println(res)
-// 	if err != nil {
-// 		// fmt.Println(err)
-// 		msg := ""
-// 		if strings.Contains(err.Error(), "not found") {
-// 			msg = "Posting not found"
-// 		} else {
-// 			msg = "internal server error"
-// 		}
-// 		return posting.Core{}, errors.New(msg)
-// 	}
-
-// 	return res, nil
-// }
-// func (ps *postingSrv) GetAllPost() ([]posting.Core, error) {
-// 	return []posting.Core{}, nil
-// }
-
-// func (ps *postingSrv) Update(token interface{}, postID int, updatedData posting.Core) (posting.Core, error) {
-// 	userID := helper.ExtractToken(token)
-// 	if userID <= 0 {
-// 		return posting.Core{}, errors.New("id user not found")
-// 	}
-// 	if validasieror := ps.validasi.Struct(updatedData); validasieror != nil {
-// 		return posting.Core{}, nil
-// 	}
-
-// 	res, err := ps.data.Update(userID, postID, updatedData)
-// 	if err != nil {
-// 		fmt.Println(err)
-// 		msg := ""
-// 		if strings.Contains(err.Error(), "not found") {
-// 			msg = "Posting not found"
-// 		} else {
-// 			msg = "internal server error"
-// 		}
-// 		return posting.Core{}, errors.New(msg)
-// 	}
-
-// 	return res, nil
-
-// }
+	return res, nil
+}
