@@ -16,7 +16,7 @@ type Core struct {
 
 type KomentarHandler interface {
 	Add() echo.HandlerFunc
-	// Update() echo.HandlerFunc
+	Update() echo.HandlerFunc
 	// GetAllPost() echo.HandlerFunc
 	// Delete() echo.HandlerFunc
 	// MyPost() echo.HandlerFunc
@@ -24,7 +24,7 @@ type KomentarHandler interface {
 
 type KomentarService interface {
 	Add(token interface{}, newKomen Core) (Core, error)
-	// Update(token interface{}, posID int, komenID int, updatedData Core) (Core, error)
+	Update(token interface{}, komenID int, postID int, updatedData Core) (Core, error)
 	// GetAllPost() ([]Core, error)
 	// Delete(token interface{}, bookID int) error
 	// MyPost(token interface{}) ([]Core, error)
@@ -32,7 +32,7 @@ type KomentarService interface {
 
 type KomentarData interface {
 	Add(userID int, newKomen Core) (Core, error)
-	// Update(userID int, posID int, komenID int, updatedData Core) (Core, error)
+	Update(userID int, komenID int, postID int, updatedData Core) (Core, error)
 	// GetAllPost() ([]Core, error)
 	// Delete(userID int, bookID int) error
 	// MyPost(userID int) ([]Core, error)

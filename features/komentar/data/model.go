@@ -29,13 +29,12 @@ func CoreToData(data komentar.Core) Komentar {
 	}
 }
 
-// func ToCore(data Posting) posting.Core {
-// 	return posting.Core{
-// 		ID:        data.ID,
-// 		Postingan: data.Postingan,
-// 		Image_url: data.Image_url,
-// 	}
-// }
+func ToCore(data Komentar) komentar.Core {
+	return komentar.Core{
+		ID:    data.ID,
+		Pesan: data.Pesan,
+	}
+}
 
 // func DataToCore(data Posting) posting.Core {
 // 	return posting.Core{

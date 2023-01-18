@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"project/features/komentar"
 	"project/helper"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -13,8 +14,6 @@ import (
 type komentarHandle struct {
 	srv komentar.KomentarService
 }
-
-// All implements book.BookHandler
 
 func New(ps komentar.KomentarService) komentar.KomentarHandler {
 	return &komentarHandle{
@@ -48,81 +47,27 @@ func (kh *komentarHandle) Add() echo.HandlerFunc {
 	}
 }
 
-// func (ph *postingHandle) Add() echo.HandlerFunc {
-// 	return func(c echo.Context) error {
-// 		input := AddUpdatePostingRequest{}
-// 		file, errPath := c.FormFile("file")
+// Update implements komentar.KomentarHandler
+func (kh *komentarHandle) Update() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		input := AddUpdateKomenRequest{}
+		KomenID, err := strconv.Atoi(c.Param("id"))
 
-// 		fmt.Print("error get path handler, err = ", errPath)
+		postID, err := strconv.Atoi(c.Param("posting_id"))
+		if err != nil {
+			return c.JSON(helper.PrintErrorResponse(err.Error()))
+		}
+		cnv := ToCore(input)
+		fmt.Println(cnv)
 
-// 		if file != nil {
-// 			res, err := helper.UploadImage(c)
-// 			// fmt.Println(res)
-// 			if err != nil {
-// 				fmt.Println(err)
-// 				return errors.New("Create gambar Failed. Cannot Upload Data.")
-// 			}
-// 			input.Image_url = res
-// 			// fmt.Println(input.Image_url)
-// 		} else {
-// 			input.Image_url = "https://project3bucker.s3.ap-southeast-1.amazonaws.com/dummy-profile-pic.png"
-// 		}
+		res, err := kh.srv.Update(c.Get("user"), KomenID, postID, *cnv)
+		if err != nil {
+			return c.JSON(helper.PrintErrorResponse(err.Error()))
+		}
 
-// 		if err := c.Bind(&input); err != nil {
-// 			return c.JSON(http.StatusBadRequest, "format inputan salah")
-// 		}
+		posting := ToResponse("update", res)
 
-// 		cnv := input.reqToCore()
+		return c.JSON(helper.PrintSuccessReponse(http.StatusOK, "sukses mengubah komentar", posting))
+	}
 
-// 		res, err := ph.srv.Add(c.Get("user"), cnv)
-// 		if err != nil {
-// 			log.Println("trouble :  ", err.Error())
-// 			return c.JSON(helper.PrintErrorResponse(err.Error()))
-// 		}
-
-// 		posting := ToResponse("add", res)
-
-// 		return c.JSON(helper.PrintSuccessReponse(http.StatusCreated, "sukses menambahkan posting", posting))
-// 	}
-// }
-// func (ph *postingHandle) Update() echo.HandlerFunc {
-// 	return func(c echo.Context) error {
-// 		input := AddUpdatePostingRequest{}
-// 		file, errPath := c.FormFile("file")
-
-// 		fmt.Print("error get path handler, err = ", errPath)
-
-// 		if file != nil {
-// 			res, err := helper.UploadImage(c)
-// 			// fmt.Println(res)
-// 			if err != nil {
-// 				fmt.Println(err)
-// 				return errors.New("Create gambar Failed. Cannot Upload Data.")
-// 			}
-// 			input.Image_url = res
-// 			// fmt.Println(input.Image_url)
-// 		} else {
-// 			input.Image_url = "https://project3bucker.s3.ap-southeast-1.amazonaws.com/dummy-profile-pic.png"
-// 		}
-
-// 		if err := c.Bind(&input); err != nil {
-// 			return c.JSON(helper.PrintErrorResponse(err.Error()))
-// 		}
-// 		cnv := ToCore(input)
-
-// 		PostID, err := strconv.Atoi(c.Param("id"))
-// 		if err != nil {
-// 			return c.JSON(helper.PrintErrorResponse(err.Error()))
-// 		}
-
-// 		res, err := ph.srv.Update(c.Get("user"), PostID, *cnv)
-// 		if err != nil {
-// 			return c.JSON(helper.PrintErrorResponse(err.Error()))
-// 		}
-
-// 		posting := ToResponse("update", res)
-
-// 		return c.JSON(helper.PrintSuccessReponse(http.StatusOK, "sukses mengubah buku", posting))
-// 	}
-
-// }
+}

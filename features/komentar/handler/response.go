@@ -18,9 +18,8 @@ type AddKomentarResponse struct {
 }
 
 type updatePostingResponse struct {
-	Pesan     string    `json:"pesan"`
-	PostingID uint      `json:"posting_id"`
-	CreatedAt time.Time `json:"tanggal"`
+	Pesan     string `json:"pesan"`
+	PostingID uint   `json:"posting_id"`
 }
 
 func ToResponse(feature string, komentar komentar.Core) interface{} {
@@ -33,8 +32,8 @@ func ToResponse(feature string, komentar komentar.Core) interface{} {
 		}
 	case "update":
 		return updatePostingResponse{
-			Pesan:     komentar.Pesan,
-			CreatedAt: komentar.CreatedAt,
+			Pesan: komentar.Pesan,
+
 			PostingID: komentar.PostingID,
 		}
 	default:

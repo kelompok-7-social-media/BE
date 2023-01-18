@@ -8,6 +8,10 @@ type AddUpdateKomenRequest struct {
 	Pesan  string `form:"pesan"`
 	PostID uint   `form:"postid"`
 }
+type UpdateKomenRequest struct {
+	Pesan  string `form:"pesan"`
+	PostID uint   `form:"postid"`
+}
 
 func (data *AddUpdateKomenRequest) reqToCore() komentar.Core {
 	return komentar.Core{
