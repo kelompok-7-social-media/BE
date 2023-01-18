@@ -10,6 +10,7 @@ import (
 	"github.com/golang-jwt/jwt"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func TestLogin(t *testing.T) {
@@ -99,7 +100,7 @@ func TestProfile(t *testing.T) {
 	t.Run("masalah di server", func(t *testing.T) {
 		repo.On("Profile", mock.Anything).Return(user.Core{}, errors.New("terdapat masalah pada server")).Once()
 		srv := New(repo)
-
+	
 		_, token := helper.GenerateJWT(1)
 		pToken := token.(*jwt.Token)
 		pToken.Valid = true
@@ -109,16 +110,6 @@ func TestProfile(t *testing.T) {
 		assert.Equal(t, uint(0), res.ID)
 		repo.AssertExpectations(t)
 	})
-	// t.Run("data tidak ditemukan", func(t *testing.T) {
-	// 	srv := New(repo)
-	// 	_, token := helper.GenerateJWT(1)
-	// 	res, err := srv.Profile(token)
-	// 	assert.Nil(t, err)
-
-	// 	assert.ErrorContains(t, err, "tidak ditemukan")
-	// 	assert.Equal(t, uint(0), res.ID)
-
-	// })
 }
 func TestAllUser(t *testing.T) {
 	repo := mocks.NewUserData(t)
@@ -269,7 +260,152 @@ func TestDelete(t *testing.T) {
 	})
 }
 func TestRegister(t *testing.T) {
-	// repo := mocks.NewUserData(t)
+	repo := mocks.NewUserData(t)
 
-	// })
+	srv := New(repo)
+
+	// Case: user melakukan pendaftaran akun baru
+	t.Run("Register successfully", func(t *testing.T) {
+		// Prgramming input and return repo
+
+		type SampleUsers struct {
+			ID       int
+			Name     string
+			Email    string
+			Username string
+			Password string
+		}
+		sample := SampleUsers{
+			ID:       1,
+			Name:     "reza",
+			Email:    "reza@gmail.com",
+			Username: "reza06",
+			Password: "12345",
+		}
+		input := user.Core{
+			Name:     sample.Name,
+			Email:    sample.Email,
+			Username: sample.Username,
+			Password: sample.Password,
+		}
+
+		// Program service
+
+		hashed, _ := helper.GeneratePassword(input.Password)
+		resData := user.Core{
+			Name:     input.Name,
+			Email:    input.Email,
+			Username: input.Username,
+			Password: hashed,
+		}
+		repo.On("Register", mock.Anything).Return(resData, nil).Once()
+		data, err := srv.Register(input)
+
+		assert.Nil(t, err)
+		errCompare := bcrypt.CompareHashAndPassword([]byte(data.Password), []byte(input.Password))
+		assert.NoError(t, errCompare)
+		assert.Equal(t, data.ID, resData.ID)
+		repo.AssertExpectations(t)
+	})
+
+	t.Run("Validation error", func(t *testing.T) {
+
+		user := user.Core{
+			Name:     "Herdy",
+			Email:    "herdy@gmail.com",
+			Username: "herdy123",
+		}
+
+		actual, err := srv.Register(user)
+
+		assert.NotNil(t, err)
+		assert.ErrorContains(t, err, "validation error")
+		assert.Empty(t, actual)
+	})
+	t.Run("bycript error", func(t *testing.T) {
+		user := user.Core{
+			Name:     "Herdy",
+			Email:    "herdy@gmail.com",
+			Username: "herdy123",
+			Password: "",
+		}
+
+		// Program service
+		data, err := srv.Register(user)
+		assert.Nil(t, err)
+		errCompare := bcrypt.CompareHashAndPassword([]byte(data.Password), []byte(user.Password))
+
+		assert.NotNil(t, errCompare)
+		assert.EqualError(t, nil, "password process error")
+		assert.Empty(t, data)
+
+	})
+	t.Run("Register error data duplicate", func(t *testing.T) {
+		type SampleUsers struct {
+			ID       int
+			Name     string
+			Email    string
+			Username string
+			Password string
+		}
+		sample := SampleUsers{
+			ID:       1,
+			Name:     "reza",
+			Email:    "reza@gmail.com",
+			Username: "reza06",
+			Password: "12345",
+		}
+		input := user.Core{
+			Name:     sample.Name,
+			Email:    sample.Email,
+			Username: sample.Username,
+			Password: sample.Password,
+		}
+
+		// Programming input and return repo
+		repo.On("Register", mock.Anything).Return(user.Core{}, errors.New("duplicated")).Once()
+
+		// Program service
+		data, err := srv.Register(input)
+
+		// Test
+		assert.NotNil(t, err)
+		assert.EqualError(t, err, "data sudah terdaftar")
+		assert.Empty(t, data)
+		repo.AssertExpectations(t)
+	})
+	t.Run("Masalah server", func(t *testing.T) {
+		type SampleUsers struct {
+			ID       int
+			Name     string
+			Email    string
+			Username string
+			Password string
+		}
+		sample := SampleUsers{
+			ID:       1,
+			Name:     "reza",
+			Email:    "reza@gmail.com",
+			Username: "reza06",
+			Password: "12345",
+		}
+		input := user.Core{
+			Name:     sample.Name,
+			Email:    sample.Email,
+			Username: sample.Username,
+			Password: sample.Password,
+		}
+
+		// Programming input and return repo
+		repo.On("Register", mock.Anything).Return(user.Core{}, errors.New("internal server error")).Once()
+
+		// Program service
+		data, err := srv.Register(input)
+
+		// Test
+		assert.NotNil(t, err)
+		assert.EqualError(t, err, "terdapat masalah pada server")
+		assert.Empty(t, data)
+		repo.AssertExpectations(t)
+	})
 }

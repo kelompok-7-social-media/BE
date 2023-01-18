@@ -36,8 +36,8 @@ func (_m *UserService) AllUser() ([]user.Core, error) {
 	return r0, r1
 }
 
-// Deactive provides a mock function with given fields: token
-func (_m *UserService) Deactive(token interface{}) (user.Core, error) {
+// Delete provides a mock function with given fields: token
+func (_m *UserService) Delete(token interface{}) (user.Core, error) {
 	ret := _m.Called(token)
 
 	var r0 user.Core

@@ -28,8 +28,8 @@ func (_m *UserHandler) AllUser() echo.HandlerFunc {
 	return r0
 }
 
-// Deactive provides a mock function with given fields:
-func (_m *UserHandler) Deactive() echo.HandlerFunc {
+// Delete provides a mock function with given fields:
+func (_m *UserHandler) Delete() echo.HandlerFunc {
 	ret := _m.Called()
 
 	var r0 echo.HandlerFunc
