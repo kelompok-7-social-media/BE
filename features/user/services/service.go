@@ -112,14 +112,16 @@ func (uuc *userUseCase) Profile(token interface{}) (user.Core, error) {
 }
 
 func (uuc *userUseCase) Update(token interface{}, updateData user.Core) (user.Core, error) {
-
-	hashed, err := helper.GeneratePassword(updateData.Password)
-	id := helper.ExtractToken(token)
-	if err != nil {
-		log.Println("bcrypt error ", err.Error())
-		return user.Core{}, errors.New("password process error")
+	if updateData.Password != "" {
+		hashed, err := helper.GeneratePassword(updateData.Password)
+		if err != nil {
+			log.Println("bcrypt error ", err.Error())
+			return user.Core{}, errors.New("password process error")
+		}
+		updateData.Password = string(hashed)
 	}
-	updateData.Password = string(hashed)
+
+	id := helper.ExtractToken(token)
 
 	res, err := uuc.qry.Update(uint(id), updateData)
 
@@ -127,6 +129,8 @@ func (uuc *userUseCase) Update(token interface{}, updateData user.Core) (user.Co
 		msg := ""
 		if strings.Contains(err.Error(), "not found") {
 			msg = "data tidak ditemukan"
+		} else if strings.Contains(err.Error(), "not valid") {
+			msg = "format tidak sesuai"
 		} else {
 			msg = "terdapat masalah pada server"
 		}
