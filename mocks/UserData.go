@@ -13,6 +13,11 @@ type UserData struct {
 	mock.Mock
 }
 
+// Delete implements user.UserData
+func (*UserData) Delete(id uint) (user.Core, error) {
+	panic("unimplemented")
+}
+
 // AllUser provides a mock function with given fields:
 func (_m *UserData) AllUser() ([]user.Core, error) {
 	ret := _m.Called()
@@ -36,7 +41,7 @@ func (_m *UserData) AllUser() ([]user.Core, error) {
 	return r0, r1
 }
 
-// Delete provides a mock function with given fields: id
+// Deactive provides a mock function with given fields: id
 func (_m *UserData) Delete(id uint) (user.Core, error) {
 	ret := _m.Called(id)
 

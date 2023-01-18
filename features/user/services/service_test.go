@@ -100,7 +100,7 @@ func TestProfile(t *testing.T) {
 	t.Run("masalah di server", func(t *testing.T) {
 		repo.On("Profile", mock.Anything).Return(user.Core{}, errors.New("terdapat masalah pada server")).Once()
 		srv := New(repo)
-
+	
 		_, token := helper.GenerateJWT(1)
 		pToken := token.(*jwt.Token)
 		pToken.Valid = true
@@ -110,16 +110,6 @@ func TestProfile(t *testing.T) {
 		assert.Equal(t, uint(0), res.ID)
 		repo.AssertExpectations(t)
 	})
-	// t.Run("data tidak ditemukan", func(t *testing.T) {
-	// 	srv := New(repo)
-	// 	_, token := helper.GenerateJWT(1)
-	// 	res, err := srv.Profile(token)
-	// 	assert.Nil(t, err)
-
-	// 	assert.ErrorContains(t, err, "tidak ditemukan")
-	// 	assert.Equal(t, uint(0), res.ID)
-
-	// })
 }
 func TestAllUser(t *testing.T) {
 	repo := mocks.NewUserData(t)
@@ -418,5 +408,4 @@ func TestRegister(t *testing.T) {
 		assert.Empty(t, data)
 		repo.AssertExpectations(t)
 	})
-
 }
