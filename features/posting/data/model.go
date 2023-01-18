@@ -30,6 +30,16 @@ func CoreToData(data posting.Core) Posting {
 	}
 }
 
+func DataToCore(data Posting) posting.Core {
+	return posting.Core{
+		ID:        data.ID,
+		Postingan: data.Postingan,
+		Image_url: data.Image_url,
+		UserName:  data.Image_url,
+		CreatedAt: data.CreatedAt,
+	}
+}
+
 // func ToCoreSlice(data []posting.Core) []Image {
 // 	images := []Image{}
 // 	for _, v := range data {
