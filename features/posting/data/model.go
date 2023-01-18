@@ -29,6 +29,13 @@ func CoreToData(data posting.Core) Posting {
 		Image_url: data.Image_url,
 	}
 }
+func ToCore(data Posting) posting.Core {
+	return posting.Core{
+		ID:        data.ID,
+		Postingan: data.Postingan,
+		Image_url: data.Image_url,
+	}
+}
 
 func DataToCore(data Posting) posting.Core {
 	return posting.Core{
