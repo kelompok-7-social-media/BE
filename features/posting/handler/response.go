@@ -12,6 +12,7 @@ type PostingResponse struct {
 }
 type AddPostingResponse struct {
 	Postingan string    `json:"postingan"`
+	Image_url string    `json:"Image_url"`
 	CreatedAt time.Time `json:"tanggal"`
 }
 type updatePostingResponse struct {
@@ -24,6 +25,7 @@ func ToResponse(feature string, posting posting.Core) interface{} {
 		return AddPostingResponse{
 			Postingan: posting.Postingan,
 			CreatedAt: posting.CreatedAt,
+			Image_url: posting.Image_url,
 		}
 	case "update":
 		return updatePostingResponse{

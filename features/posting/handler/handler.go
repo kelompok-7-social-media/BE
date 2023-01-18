@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"errors"
+	"fmt"
 	"log"
 	"net/http"
 	"project/features/posting"
@@ -24,6 +26,19 @@ func New(ps posting.PostingService) posting.PostingHandler {
 func (ph *postingHandle) Add() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		input := AddUpdatePostingRequest{}
+		file, _ := c.FormFile("file")
+		if file != nil {
+			res, err := helper.UploadImage(c)
+			fmt.Println(res)
+			if err != nil {
+				return errors.New("Create gambar Failed. Cannot Upload Data.")
+			}
+			input.Image_url = res
+			fmt.Println(input.Image_url)
+		} else {
+			input.Image_url = "https://project3bucker.s3.ap-southeast-1.amazonaws.com/dummy-profile-pic.png"
+		}
+
 		if err := c.Bind(&input); err != nil {
 			return c.JSON(http.StatusBadRequest, "format inputan salah")
 		}
