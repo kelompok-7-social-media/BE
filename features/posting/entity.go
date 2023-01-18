@@ -9,7 +9,7 @@ import (
 type Core struct {
 	ID        uint
 	Postingan string `validate:"required"`
-	Image     string
+	Image_url string
 	UserName  string
 	CreatedAt time.Time
 }
