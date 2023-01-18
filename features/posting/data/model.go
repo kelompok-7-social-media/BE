@@ -10,17 +10,12 @@ import (
 
 type Posting struct {
 	gorm.Model
+	Image_url string
 	Postingan string
 	UserID    uint
-	Comments  []data.Comment `gorm:"foreignKey:PostingID;references:ID;constraint:OnDelete:CASCADE"`
+	Komentars []data.Komentar
 	// Image     []data.Images
-	Image_url string
-}
 
-type Comment struct {
-	PostingID uint
-	UserID    uint
-	Comment   string
 }
 
 type PostUser struct {

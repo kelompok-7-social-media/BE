@@ -10,12 +10,12 @@ import (
 
 type User struct {
 	gorm.Model
-	Name     string
-	Email    string
-	Username string
-	Password string
-	Posting  []data.Posting `gorm:"foreignKey:UserID;references:ID;constraint:OnDelete:CASCADE"`
-	Comment  []cd.Comment   `gorm:"foreignKey:UserID;references:ID;constraint:OnDelete:CASCADE"`
+	Name      string
+	Email     string
+	Username  string
+	Password  string
+	Posting   []data.Posting
+	Komentars []cd.Komentar
 }
 
 func ToCore(data User) user.Core {
