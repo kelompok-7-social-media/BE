@@ -47,7 +47,7 @@ func (ps *postingSrv) Add(token interface{}, newPosting posting.Core) (posting.C
 		// fmt.Println(err)
 		msg := ""
 		if strings.Contains(err.Error(), "not found") {
-			msg = "posting not found"
+			msg = "Posting not found"
 		} else {
 			msg = "internal server error"
 		}
@@ -74,7 +74,7 @@ func (ps *postingSrv) Update(token interface{}, postID int, updatedData posting.
 		fmt.Println(err)
 		msg := ""
 		if strings.Contains(err.Error(), "not found") {
-			msg = "book or user not found"
+			msg = "Posting not found"
 		} else {
 			msg = "internal server error"
 		}
