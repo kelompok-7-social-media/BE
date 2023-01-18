@@ -57,7 +57,18 @@ func (ps *postingSrv) Add(token interface{}, newPosting posting.Core) (posting.C
 	return res, nil
 }
 func (ps *postingSrv) GetAllPost() ([]posting.Core, error) {
-	return []posting.Core{}, nil
+	All, err := ps.data.GetAllPost()
+	if err != nil {
+		msg := ""
+		if strings.Contains(err.Error(), "not found") {
+			msg = "post not found"
+		} else {
+			msg = "internal server error"
+		}
+		return nil, errors.New(msg)
+	}
+
+	return All, nil
 }
 
 func (ps *postingSrv) Update(token interface{}, postID int, updatedData posting.Core) (posting.Core, error) {
@@ -85,9 +96,32 @@ func (ps *postingSrv) Update(token interface{}, postID int, updatedData posting.
 
 }
 func (ps *postingSrv) Delete(token interface{}, postID int) error {
+	userID := helper.ExtractToken(token)
+	if userID <= 0 {
+		return errors.New("user not found")
+	}
+
+	err := ps.data.Delete(userID, postID)
+	if err != nil {
+		msg := ""
+		if strings.Contains(err.Error(), "not found") {
+			msg = "post not found"
+		} else {
+			msg = "internal server error"
+
+		}
+		return errors.New(msg)
+	}
 	return nil
 }
 
 func (ps *postingSrv) MyPost(token interface{}) ([]posting.Core, error) {
-	return []posting.Core{}, nil
+	userID := helper.ExtractToken(token)
+	if userID <= 0 {
+		return nil, errors.New("user not found")
+	}
+
+	res, _ := ps.data.MyPost(userID)
+
+	return res, nil
 }
