@@ -51,11 +51,14 @@ func main() {
 	e.PUT("/users", userHdl.Update(), middleware.JWT([]byte(config.JWT_KEY)))
 	e.DELETE("/users", userHdl.Delete(), middleware.JWT([]byte(config.JWT_KEY)))
 
-	e.POST("/posting", postingHdl.Add(), middleware.JWT([]byte(config.JWT_KEY)))
-	e.PUT("/posting/:id", postingHdl.Update(), middleware.JWT([]byte(config.JWT_KEY)))
+	e.POST("/post", postingHdl.Add(), middleware.JWT([]byte(config.JWT_KEY)))
+	e.GET("/post", postingHdl.GetAllPost())
+	e.PUT("/post/:id", postingHdl.Update(), middleware.JWT([]byte(config.JWT_KEY)))
+	e.GET("/post/:id", postingHdl.MyPost(), middleware.JWT([]byte(config.JWT_KEY)))
+	e.DELETE("/posting", postingHdl.Delete(), middleware.JWT([]byte(config.JWT_KEY)))
 
 	e.POST("/comment", commentHdl.Add(), middleware.JWT([]byte(config.JWT_KEY)))
-	e.PUT("/comment/:id", commentHdl.Update(), middleware.JWT([]byte(config.JWT_KEY)))
+	// e.PUT("/comment/:id", commentHdl.Update(), middleware.JWT([]byte(config.JWT_KEY)))
 	if err := e.Start(":8000"); err != nil {
 		log.Println(err.Error())
 	}
