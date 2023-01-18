@@ -8,7 +8,7 @@ import (
 
 type Komentar struct {
 	gorm.Model
-	Pesan     string
+	Comment   string
 	PostingID uint
 	UserID    uint
 }
@@ -24,16 +24,25 @@ type Komentar struct {
 func CoreToData(data komentar.Core) Komentar {
 	return Komentar{
 		Model:     gorm.Model{ID: data.ID},
-		Pesan:     data.Pesan,
+		Comment:   data.Comment,
 		PostingID: data.PostingID,
+		UserID:    data.UserID,
 	}
 }
 
 func ToCore(data Komentar) komentar.Core {
 	return komentar.Core{
-		ID:    data.ID,
-		Pesan: data.Pesan,
+		ID:      data.ID,
+		Comment: data.Comment,
 	}
+}
+func DataToCoreArr(data []Komentar) []komentar.Core {
+	var commentArr = []komentar.Core{}
+	for _, listOfComment := range data {
+		commentArr = append(commentArr, ToCore(listOfComment))
+	}
+
+	return commentArr
 }
 
 // func DataToCore(data Posting) posting.Core {

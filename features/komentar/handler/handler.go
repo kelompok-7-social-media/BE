@@ -24,7 +24,7 @@ func New(ps komentar.KomentarService) komentar.KomentarHandler {
 // Add implements komentar.KomentarHandler
 func (kh *komentarHandle) Add() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		input := AddUpdateKomenRequest{}
+		input := AddKomenRequest{}
 		// idParam := c.Param("posting_id")
 		// id, _ := strconv.Atoi(idParam)
 		if err := c.Bind(&input); err != nil {
@@ -46,28 +46,50 @@ func (kh *komentarHandle) Add() echo.HandlerFunc {
 		return c.JSON(helper.PrintSuccessReponse(http.StatusCreated, "sukses menambahkan Komentar", posting))
 	}
 }
+func (kh *komentarHandle) GetCommentsByPost() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		postID, _ := strconv.Atoi(c.Param("post_id"))
+		result, _ := kh.srv.GetCommentsByPost(postID)
+
+		listRes := ListCommentCoreToCommentsRespon(result)
+		return c.JSON(helper.PrintSuccessReponse(http.StatusOK, "sukses menampilkan  post", listRes))
+	}
+}
+func (kh *komentarHandle) Delete() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		postID, _ := strconv.Atoi(c.Param("post_id"))
+		commentID, _ := strconv.Atoi(c.Param("comment_id"))
+
+		del := kh.srv.Delete(c.Get("user"), postID, commentID)
+		if del != nil {
+			return c.JSON(helper.PrintErrorResponse(del.Error()))
+		}
+
+		return c.JSON(helper.PrintSuccessReponse(http.StatusOK, "sukses menghapus postingan"))
+	}
+}
 
 // Update implements komentar.KomentarHandler
-func (kh *komentarHandle) Update() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		input := AddUpdateKomenRequest{}
-		KomenID, err := strconv.Atoi(c.Param("id"))
+// func (kh *komentarHandle) Update() echo.HandlerFunc {
+// 	return func(c echo.Context) error {
+// 		input := AddUpdateKomenRequest{}
+// 		KomenID, err := strconv.Atoi(c.Param("id"))
 
-		postID, err := strconv.Atoi(c.Param("posting_id"))
-		if err != nil {
-			return c.JSON(helper.PrintErrorResponse(err.Error()))
-		}
-		cnv := ToCore(input)
-		fmt.Println(cnv)
+// 		postID, err := strconv.Atoi(c.Param("posting_id"))
+// 		if err != nil {
+// 			return c.JSON(helper.PrintErrorResponse(err.Error()))
+// 		}
+// 		cnv := ToCore(input)
+// 		fmt.Println(cnv)
 
-		res, err := kh.srv.Update(c.Get("user"), KomenID, postID, *cnv)
-		if err != nil {
-			return c.JSON(helper.PrintErrorResponse(err.Error()))
-		}
+// 		res, err := kh.srv.Update(c.Get("user"), KomenID, postID, *cnv)
+// 		if err != nil {
+// 			return c.JSON(helper.PrintErrorResponse(err.Error()))
+// 		}
 
-		posting := ToResponse("update", res)
+// 		posting := ToResponse("update", res)
 
-		return c.JSON(helper.PrintSuccessReponse(http.StatusOK, "sukses mengubah komentar", posting))
-	}
+// 		return c.JSON(helper.PrintSuccessReponse(http.StatusOK, "sukses mengubah komentar", posting))
+// 	}
 
-}
+// }
