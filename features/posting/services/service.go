@@ -54,3 +54,16 @@ func (ps *postingSrv) Add(token interface{}, newPosting posting.Core) (posting.C
 
 	return res, nil
 }
+func (ps *postingSrv) GetAllPost() ([]posting.Core, error) {
+	return []posting.Core{}, nil
+}
+func (ps *postingSrv) Update(token interface{}, postID int, updatedData posting.Core) (posting.Core, error) {
+	return posting.Core{}, nil
+}
+func (ps *postingSrv) Delete(token interface{}, postID int) error {
+	return nil
+}
+
+func (ps *postingSrv) MyPost(token interface{}) ([]posting.Core, error) {
+	return []posting.Core{}, nil
+}

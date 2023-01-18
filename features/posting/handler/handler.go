@@ -41,3 +41,16 @@ func (ph *postingHandle) Add() echo.HandlerFunc {
 		return c.JSON(helper.PrintSuccessReponse(http.StatusCreated, "sukses menambahkan posting", posting))
 	}
 }
+func (ph *postingHandle) Update() echo.HandlerFunc {
+	return func(c echo.Context) error { return c.JSON(http.StatusBadRequest, "format inputan salah") }
+
+}
+func (ph *postingHandle) GetAllPost() echo.HandlerFunc {
+	return func(c echo.Context) error { return c.JSON(http.StatusBadRequest, "format inputan salah") }
+}
+func (ph *postingHandle) Delete() echo.HandlerFunc {
+	return func(c echo.Context) error { return c.JSON(http.StatusBadRequest, "format inputan salah") }
+}
+func (ph *postingHandle) MyPost() echo.HandlerFunc {
+	return func(c echo.Context) error { return c.JSON(http.StatusBadRequest, "format inputan salah") }
+}
