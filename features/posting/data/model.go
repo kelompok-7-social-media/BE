@@ -11,7 +11,13 @@ type Posting struct {
 	gorm.Model
 	Postingan string
 	UserID    uint
-	// Image     []data.Images
+	Image     []Image
+}
+
+type Image struct {
+	gorm.Model
+	PostID    uint
+	Image_url string
 }
 
 type PostUser struct {
