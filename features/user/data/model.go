@@ -1,6 +1,7 @@
 package data
 
 import (
+	cd "project/features/komentar/data"
 	"project/features/posting/data"
 	"project/features/user"
 
@@ -13,7 +14,8 @@ type User struct {
 	Email    string
 	Username string
 	Password string
-	Posting  []data.Posting
+	Posting  []data.Posting `gorm:"foreignKey:UserID;references:ID;constraint:OnDelete:CASCADE"`
+	Comment  []cd.Comment   `gorm:"foreignKey:UserID;references:ID;constraint:OnDelete:CASCADE"`
 }
 
 func ToCore(data User) user.Core {

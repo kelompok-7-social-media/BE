@@ -9,7 +9,7 @@ func TestAdd(t *testing.T) {
 
 	// srv := New(repo)
 
-	// 	// Case: user melakukan pendaftaran akun baru
+	// 	// Case: user melakukan penambahan postingan baru
 	// 	t.Run("Add successfully", func(t *testing.T) {
 	// 		// Prgramming input and return repo
 

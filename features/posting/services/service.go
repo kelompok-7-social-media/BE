@@ -45,7 +45,7 @@ func (ps *postingSrv) Add(token interface{}, newPosting posting.Core) (posting.C
 	if err != nil {
 		msg := ""
 		if strings.Contains(err.Error(), "not found") {
-			msg = "Book not found"
+			msg = "Posting not found"
 		} else {
 			msg = "internal server error"
 		}
