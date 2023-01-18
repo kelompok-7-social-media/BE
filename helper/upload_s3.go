@@ -37,7 +37,7 @@ func String(length int) string {
 
 // UPLOAD FOTO PROFILE TO AWS S3
 
-func UploadProfile(c echo.Context) (string, error) {
+func UploadImage(c echo.Context) (string, error) {
 
 	file, fileheader, err := c.Request().FormFile("file")
 	if err != nil {
@@ -47,7 +47,7 @@ func UploadProfile(c echo.Context) (string, error) {
 
 	randomStr := String(20)
 
-	godotenv.Load(".env")
+	godotenv.Load("local.env")
 
 	s3Config := &aws.Config{
 		Region:      aws.String(os.Getenv("AWS_REGION")),
@@ -59,9 +59,9 @@ func UploadProfile(c echo.Context) (string, error) {
 
 	input := &s3manager.UploadInput{
 		Bucket:      aws.String(os.Getenv("AWS_BUCKET_NAME")),                       // bucket's name
-		Key:         aws.String("profile/" + randomStr + "-" + fileheader.Filename), // files destination location
+		Key:         aws.String("posting/" + randomStr + "-" + fileheader.Filename), // files destination location
 		Body:        file,                                                           // content of the file
-		ContentType: aws.String("image/jpg"),                                        // content type
+		ContentType: aws.String("image/jpeg"),                                       // content type
 	}
 	res, err := uploader.UploadWithContext(context.Background(), input)
 
@@ -69,7 +69,7 @@ func UploadProfile(c echo.Context) (string, error) {
 	return res.Location, err
 }
 
-func UploadProfileProduct(c echo.Context) (string, error) {
+func UploadImage2(c echo.Context) (string, error) {
 
 	file, fileheader, err := c.Request().FormFile("file")
 	if err != nil {
@@ -79,7 +79,7 @@ func UploadProfileProduct(c echo.Context) (string, error) {
 
 	randomStr := String(20)
 
-	godotenv.Load(".env")
+	godotenv.Load("local.env")
 
 	s3Config := &aws.Config{
 		Region:      aws.String(os.Getenv("AWS_REGION")),
@@ -93,7 +93,7 @@ func UploadProfileProduct(c echo.Context) (string, error) {
 		Bucket:      aws.String(os.Getenv("AWS_BUCKET_NAME")),                       // bucket's name
 		Key:         aws.String("product/" + randomStr + "-" + fileheader.Filename), // files destination location
 		Body:        file,                                                           // content of the file
-		ContentType: aws.String("image/jpg"),                                        // content type
+		ContentType: aws.String("image/jpeg"),                                       // content type
 	}
 	res, err := uploader.UploadWithContext(context.Background(), input)
 
