@@ -68,11 +68,29 @@ func (pd *postingData) Update(userID int, postID int, updatedData posting.Core) 
 }
 
 func (pd *postingData) GetAllPost() ([]posting.Core, error) {
+	res := []Posting{}
+	err := pd.db.Find(&res).Error
+	if err != nil {
+		log.Println("getall post query error : ", err.Error())
+		return DataToCoreArr(res), err
+
+	}
 	return []posting.Core{}, nil
 }
 func (pd *postingData) Delete(userID int, postID int) error {
+	var record Posting
+	err := pd.db.Where("id = ? && user_id = ?", postID, userID).Delete(&record).Error
+	if err != nil {
+		log.Println("delete book query error :", err.Error())
+		return err
+	}
 	return nil
 }
 func (pd *postingData) MyPost(userID int) ([]posting.Core, error) {
-	return []posting.Core{}, nil
+	myPost := []Posting{}
+	if err := pd.db.Where("user_id = ?", userID).Find(&myPost).Error; err != nil {
+		log.Println("Get Mypost query error", err.Error())
+		return []posting.Core{}, err
+	}
+	return DataToCoreArr(myPost), nil
 }
