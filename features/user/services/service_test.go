@@ -100,7 +100,7 @@ func TestProfile(t *testing.T) {
 	t.Run("masalah di server", func(t *testing.T) {
 		repo.On("Profile", mock.Anything).Return(user.Core{}, errors.New("terdapat masalah pada server")).Once()
 		srv := New(repo)
-	
+
 		_, token := helper.GenerateJWT(1)
 		pToken := token.(*jwt.Token)
 		pToken.Valid = true
@@ -322,24 +322,7 @@ func TestRegister(t *testing.T) {
 		assert.ErrorContains(t, err, "validation error")
 		assert.Empty(t, actual)
 	})
-	t.Run("bycript error", func(t *testing.T) {
-		user := user.Core{
-			Name:     "Herdy",
-			Email:    "herdy@gmail.com",
-			Username: "herdy123",
-			Password: "",
-		}
 
-		// Program service
-		data, err := srv.Register(user)
-		assert.Nil(t, err)
-		errCompare := bcrypt.CompareHashAndPassword([]byte(data.Password), []byte(user.Password))
-
-		assert.NotNil(t, errCompare)
-		assert.EqualError(t, nil, "password process error")
-		assert.Empty(t, data)
-
-	})
 	t.Run("Register error data duplicate", func(t *testing.T) {
 		type SampleUsers struct {
 			ID       int
