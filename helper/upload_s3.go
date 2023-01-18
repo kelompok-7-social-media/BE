@@ -2,7 +2,7 @@ package helper
 
 import (
 	"context"
-	"log"
+	"fmt"
 	"math/rand"
 	"os"
 	"time"
@@ -41,7 +41,7 @@ func UploadImage(c echo.Context) (string, error) {
 
 	file, fileheader, err := c.Request().FormFile("file")
 	if err != nil {
-		log.Print(err)
+		fmt.Print("\n\nfailed get pah file. err = ", err)
 		return "", err
 	}
 
@@ -61,42 +61,10 @@ func UploadImage(c echo.Context) (string, error) {
 		Bucket:      aws.String(os.Getenv("AWS_BUCKET_NAME")),                       // bucket's name
 		Key:         aws.String("posting/" + randomStr + "-" + fileheader.Filename), // files destination location
 		Body:        file,                                                           // content of the file
-		ContentType: aws.String("image/jpeg"),                                       // content type
+		ContentType: aws.String("image/jpg"),                                        // content type
 	}
 	res, err := uploader.UploadWithContext(context.Background(), input)
-
-	// RETURN URL LOCATION IN AWS
-	return res.Location, err
-}
-
-func UploadImage2(c echo.Context) (string, error) {
-
-	file, fileheader, err := c.Request().FormFile("file")
-	if err != nil {
-		log.Print(err)
-		return "", err
-	}
-
-	randomStr := String(20)
-
-	godotenv.Load("local.env")
-
-	s3Config := &aws.Config{
-		Region:      aws.String(os.Getenv("AWS_REGION")),
-		Credentials: credentials.NewStaticCredentials(os.Getenv("ACCESS_KEY_IAM"), os.Getenv("SECRET_KEY_IAM"), ""),
-	}
-	s3Session := session.New(s3Config)
-
-	uploader := s3manager.NewUploader(s3Session)
-
-	input := &s3manager.UploadInput{
-		Bucket:      aws.String(os.Getenv("AWS_BUCKET_NAME")),                       // bucket's name
-		Key:         aws.String("product/" + randomStr + "-" + fileheader.Filename), // files destination location
-		Body:        file,                                                           // content of the file
-		ContentType: aws.String("image/jpeg"),                                       // content type
-	}
-	res, err := uploader.UploadWithContext(context.Background(), input)
-
+	fmt.Println("\n\nerror upload to s3. err = ", err)
 	// RETURN URL LOCATION IN AWS
 	return res.Location, err
 }
