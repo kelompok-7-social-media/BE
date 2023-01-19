@@ -41,9 +41,9 @@ func (kd *komentarData) Add(userID int, newKomen komentar.Core) (komentar.Core, 
 
 	return newKomen, nil
 }
-func (kd *komentarData) GetCommentsByPost(userID int, postID int) ([]komentar.Core, error) {
+func (kd *komentarData) GetCommentsByPost(postID int) ([]komentar.Core, error) {
 	comments := []KomenUser{}
-	if err := kd.db.Where("user_id an posting_id = ?", userID, postID).Find(&comments).Error; err != nil {
+	if err := kd.db.Raw("SELECT komentars.id, komentars.comment, komentars.posting_id, users.username FROM komentars JOIN users ON users.id = komentars.user_id JOIN postings ON postings.id = komentars.posting_id WHERE komentars.posting_id =? AND komentars.deleted_at IS NULL", postID).Find(&comments).Error; err != nil {
 		log.Println("Get Mypost query error", err.Error())
 		return []komentar.Core{}, err
 	}

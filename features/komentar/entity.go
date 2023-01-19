@@ -23,7 +23,7 @@ type KomentarHandler interface {
 
 type KomentarService interface {
 	Add(token interface{}, newComment Core) (Core, error)
-	GetCommentsByPost(token interface{}, postID int) ([]Core, error)
+	GetCommentsByPost(postID int) ([]Core, error)
 	Delete(token interface{}, postID int, commentID int) error
 	Update(token interface{}, commentID int, updatedComment Core) (Core, error)
 	GetAllKomen() ([]Core, error)
@@ -31,7 +31,7 @@ type KomentarService interface {
 
 type KomentarData interface {
 	Add(userID int, newComment Core) (Core, error)
-	GetCommentsByPost(userID, postID int) ([]Core, error)
+	GetCommentsByPost(postID int) ([]Core, error)
 	Delete(UserID int, postID int, commentID int) error
 	Update(UserID, commentID int, updatedComment Core) (Core, error)
 	GetAllKomen() ([]Core, error)
