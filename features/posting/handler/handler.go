@@ -98,7 +98,7 @@ func (ph *postingHandle) Update() echo.HandlerFunc {
 
 		posting := ToResponse("update", res)
 
-		return c.JSON(helper.PrintSuccessReponse(http.StatusOK, "sukses mengubah buku", posting))
+		return c.JSON(helper.PrintSuccessReponse(http.StatusOK, "sukses mengubah posting", posting))
 	}
 
 }
@@ -112,14 +112,14 @@ func (ph *postingHandle) GetAllPost() echo.HandlerFunc {
 }
 func (ph *postingHandle) Delete() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		postID, _ := strconv.Atoi(c.Param("id"))
+		PostID, _ := strconv.Atoi(c.Param("id"))
 
-		del := ph.srv.Delete(c.Get("user"), postID)
+		del := ph.srv.Delete(c.Get("user"), PostID)
 		if del != nil {
 			return c.JSON(helper.PrintErrorResponse(del.Error()))
 		}
 
-		return c.JSON(helper.PrintSuccessReponse(http.StatusOK, "sukses menghapus postingan"))
+		return c.JSON(helper.PrintSuccessReponse(http.StatusOK, "sukses menghapus buku"))
 	}
 }
 func (ph *postingHandle) MyPost() echo.HandlerFunc {
@@ -129,6 +129,6 @@ func (ph *postingHandle) MyPost() echo.HandlerFunc {
 
 		listRes := ListPostCoreToPostsRespon(res)
 
-		return c.JSON(helper.PrintSuccessReponse(http.StatusOK, "sukses menampilkan postingan saya", listRes))
+		return c.JSON(helper.PrintSuccessReponse(http.StatusOK, "sukses menampilkan postinganku", listRes))
 	}
 }

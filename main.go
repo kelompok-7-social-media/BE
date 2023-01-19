@@ -52,15 +52,16 @@ func main() {
 	e.DELETE("/users", userHdl.Delete(), middleware.JWT([]byte(config.JWT_KEY)))
 
 	e.POST("/posts", postingHdl.Add(), middleware.JWT([]byte(config.JWT_KEY)))
-	e.GET("/posts", postingHdl.GetAllPost())
+	e.GET("/allposts", postingHdl.GetAllPost()) ///ini g bisa  dan juga ini sudah diubah by fajar
 	e.PUT("/posts/:id", postingHdl.Update(), middleware.JWT([]byte(config.JWT_KEY)))
-	e.GET("/posts/:id", postingHdl.MyPost(), middleware.JWT([]byte(config.JWT_KEY)))
-	e.DELETE("/posts", postingHdl.Delete(), middleware.JWT([]byte(config.JWT_KEY)))
+	e.GET("/posts", postingHdl.MyPost(), middleware.JWT([]byte(config.JWT_KEY)))        ///ini sudah diubah by fajar
+	e.DELETE("/posts/:id", postingHdl.Delete(), middleware.JWT([]byte(config.JWT_KEY))) // ini g bisa dan udah di ubah by fajar
 
 	e.POST("/comment", commentHdl.Add(), middleware.JWT([]byte(config.JWT_KEY)))
-	e.GET("/comment", commentHdl.GetCommentsByPost())
-	e.PUT("/comment", commentHdl.Update(), middleware.JWT([]byte(config.JWT_KEY)))
-	e.DELETE("/comment", commentHdl.Delete(), middleware.JWT([]byte(config.JWT_KEY)))
+	e.GET("/allcomment", commentHdl.GetAllKomen())
+	e.GET("/comment", commentHdl.GetCommentsByPost())                                 //ini g bisa di cek lagi
+	e.PUT("/comment", commentHdl.Update(), middleware.JWT([]byte(config.JWT_KEY)))    ///ini g bisa di cek lagi
+	e.DELETE("/comment", commentHdl.Delete(), middleware.JWT([]byte(config.JWT_KEY))) ///ini g bisa di cek lagi endpoint
 	// e.PUT("/comment/:id", commentHdl.Update(), middleware.JWT([]byte(config.JWT_KEY)))
 	if err := e.Start(":8000"); err != nil {
 		log.Println(err.Error())

@@ -13,13 +13,12 @@ type Komentar struct {
 	UserID    uint
 }
 
-// type PostUser struct {
-// 	ID        uint
-// 	Postingan string
-// 	UserName  string
-// 	Image_url string
-// 	CreatedAt time.Time
-// }
+type KomenUser struct {
+	ID        uint
+	Comment   string
+	PostingID uint
+	Username  string
+}
 
 func CoreToData(data komentar.Core) Komentar {
 	return Komentar{
@@ -60,5 +59,21 @@ func DataToCoreArr(data []Komentar) []komentar.Core {
 // 		postArr = append(postArr, DataToCore(listOfPost))
 // 	}
 
-// 	return postArr
-// }
+//		return postArr
+//	}
+func (dataModel *KomenUser) ModelsToCore() komentar.Core { //fungsi yang mengambil data dari  user gorm(model.go)  dan merubah data ke entities usercore
+	return komentar.Core{
+		ID:        dataModel.ID,
+		Comment:   dataModel.Comment,
+		PostingID: dataModel.PostingID,
+		Username:  dataModel.Username,
+	}
+}
+
+func ListModelTOCore(dataModel []KomenUser) []komentar.Core { //fungsi yang mengambil data dari  user gorm(model.go)  dan merubah data ke entities usercore
+	var dataCore []komentar.Core
+	for _, value := range dataModel {
+		dataCore = append(dataCore, value.ModelsToCore())
+	}
+	return dataCore //  untuk menampilkan data ke controller
+}

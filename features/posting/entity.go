@@ -10,7 +10,7 @@ type Core struct {
 	ID        uint
 	Postingan string `validate:"required"`
 	Image_url string
-	UserName  string
+	Username  string
 	CreatedAt time.Time
 }
 

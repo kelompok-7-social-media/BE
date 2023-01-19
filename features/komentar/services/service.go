@@ -110,3 +110,21 @@ func (ks *komentarSrv) Update(token interface{}, commentID int, updatedData kome
 
 	return res, nil
 }
+
+// GetAllKomen implements komentar.KomentarService
+func (ks *komentarSrv) GetAllKomen() ([]komentar.Core, error) {
+	All, err := ks.data.GetAllKomen()
+	fmt.Println("ini service", All)
+
+	if err != nil {
+		msg := ""
+		if strings.Contains(err.Error(), "not found") {
+			msg = "komentar not found"
+		} else {
+			msg = "internal server error"
+		}
+		return nil, errors.New(msg)
+	}
+
+	return All, nil
+}
