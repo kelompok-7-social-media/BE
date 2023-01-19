@@ -57,15 +57,14 @@ func (kh *komentarHandle) GetCommentsByPost() echo.HandlerFunc {
 }
 func (kh *komentarHandle) Delete() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		postID, _ := strconv.Atoi(c.Param("post_id"))
 		commentID, _ := strconv.Atoi(c.Param("comment_id"))
 
-		del := kh.srv.Delete(c.Get("user"), postID, commentID)
+		del := kh.srv.Delete(c.Get("user"), commentID)
 		if del != nil {
 			return c.JSON(helper.PrintErrorResponse(del.Error()))
 		}
 
-		return c.JSON(helper.PrintSuccessReponse(http.StatusOK, "sukses menghapus postingan"))
+		return c.JSON(helper.PrintSuccessReponse(http.StatusOK, "sukses menghapus komentar"))
 	}
 }
 

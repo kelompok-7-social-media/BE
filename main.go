@@ -57,11 +57,11 @@ func main() {
 	e.GET("/posts", postingHdl.MyPost(), middleware.JWT([]byte(config.JWT_KEY)))        ///ini sudah diubah by fajar
 	e.DELETE("/posts/:id", postingHdl.Delete(), middleware.JWT([]byte(config.JWT_KEY))) // ini g bisa dan udah di ubah by fajar
 
-	e.POST("/comment", commentHdl.Add(), middleware.JWT([]byte(config.JWT_KEY)))
-	e.GET("/allcomment", commentHdl.GetAllKomen())
-	e.GET("/comment/:post_id", commentHdl.GetCommentsByPost())                        //ini g bisa di cek lagi
-	e.PUT("/comment", commentHdl.Update(), middleware.JWT([]byte(config.JWT_KEY)))    ///ini g bisa di cek lagi
-	e.DELETE("/comment", commentHdl.Delete(), middleware.JWT([]byte(config.JWT_KEY))) ///ini g bisa di cek lagi endpoint
+	e.POST("/comments", commentHdl.Add(), middleware.JWT([]byte(config.JWT_KEY)))
+	e.GET("/allcomments", commentHdl.GetAllKomen())
+	e.GET("/comments/:post_id", commentHdl.GetCommentsByPost())                                    //ini g bisa di cek lagi
+	e.PUT("/comments", commentHdl.Update(), middleware.JWT([]byte(config.JWT_KEY)))                ///ini g bisa di cek lagi
+	e.DELETE("/comments/:comment_id", commentHdl.Delete(), middleware.JWT([]byte(config.JWT_KEY))) ///ini g bisa di cek lagi endpoint
 	// e.PUT("/comment/:id", commentHdl.Update(), middleware.JWT([]byte(config.JWT_KEY)))
 	if err := e.Start(":8000"); err != nil {
 		log.Println(err.Error())

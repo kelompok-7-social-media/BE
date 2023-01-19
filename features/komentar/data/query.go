@@ -53,9 +53,9 @@ func (kd *komentarData) GetCommentsByPost(postID int) ([]komentar.Core, error) {
 	return dataCore, nil
 }
 
-func (kd *komentarData) Delete(userID int, postID int, commentID int) error {
+func (kd *komentarData) Delete(userID int, commentID int) error {
 	var record Komentar
-	err := kd.db.Where("id = ? AND user_id = ? AND post_id = ? ", commentID, userID, postID).Delete(&record).Error
+	err := kd.db.Where("id = ? AND user_id = ?", commentID, userID).Delete(&record).Error
 	if err != nil {
 		log.Println("delete comment query error :", err.Error())
 		return err
@@ -64,37 +64,37 @@ func (kd *komentarData) Delete(userID int, postID int, commentID int) error {
 }
 
 // Update implements komentar.KomentarData
-func (kd *komentarData) Update(userID int, commentID int, updatedData komentar.Core) (komentar.Core, error) {
-	cnv := CoreToData(updatedData)
-	cnv.ID = uint(commentID)
-	cnv.UserID = uint(userID)
+// func (kd *komentarData) Update(userID int, commentID int, updatedData komentar.Core) (komentar.Core, error) {
+// 	cnv := CoreToData(updatedData)
+// 	cnv.ID = uint(commentID)
+// 	cnv.UserID = uint(userID)
 
-	// DB Update(value)
-	tx := kd.db.Model(&cnv).Where("user_id = ?", userID).Updates(&cnv)
-	if tx.Error != nil {
-		log.Println("update comment query error :", tx.Error)
-		return komentar.Core{}, tx.Error
+// 	// DB Update(value)
+// 	tx := kd.db.Model(&cnv).Where("user_id = ?", userID).Updates(&cnv)
+// 	if tx.Error != nil {
+// 		log.Println("update comment query error :", tx.Error)
+// 		return komentar.Core{}, tx.Error
 
-	}
+// 	}
 
-	// Rows affected checking
-	if tx.RowsAffected <= 0 {
-		log.Println("update comment query error : data not found")
-		return komentar.Core{}, errors.New("not found")
-	}
+// 	// Rows affected checking
+// 	if tx.RowsAffected <= 0 {
+// 		log.Println("update comment query error : data not found")
+// 		return komentar.Core{}, errors.New("not found")
+// 	}
 
-	// return result converting cnv to book.Core
-	return ToCore(cnv), nil
-}
+// 	// return result converting cnv to book.Core
+// 	return ToCore(cnv), nil
+// }
 
 // GetAllKomen implements komentar.KomentarData
-func (kd *komentarData) GetAllKomen() ([]komentar.Core, error) {
-	var komentar []KomenUser
-	tx := kd.db.Raw("SELECT komentars.id, komentars.comment, komentars.posting_id, users.username FROM komentars JOIN users ON users.id = komentars.user_id JOIN postings ON postings.id = komentars.posting_id WHERE komentars.deleted_at IS NULL").Find(&komentar)
-	if tx.Error != nil {
-		return nil, tx.Error
-	}
-	var dataCore = ListModelTOCore(komentar)
+// func (kd *komentarData) GetAllKomen() ([]komentar.Core, error) {
+// 	var komentar []KomenUser
+// 	tx := kd.db.Raw("SELECT komentars.id, komentars.comment, komentars.posting_id, users.username FROM komentars JOIN users ON users.id = komentars.user_id JOIN postings ON postings.id = komentars.posting_id WHERE komentars.deleted_at IS NULL").Find(&komentar)
+// 	if tx.Error != nil {
+// 		return nil, tx.Error
+// 	}
+// 	var dataCore = ListModelTOCore(komentar)
 
-	return dataCore, nil
-}
+// 	return dataCore, nil
+// }
