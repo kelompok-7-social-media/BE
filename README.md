@@ -57,7 +57,7 @@ git@github.com:kelompok-7-social-media/BE.git
   
 - Rischi Yuda:
 
-  [![GitHub](https://img.shields.io/badge/- Rischi-black?style=for-the-badge&logo=github&logoColor=white)]([https://github.com/Rischiyuda) 
+  [![GitHub](https://img.shields.io/badge/-Rischi-black?style=for-the-badge&logo=github&logoColor=white)]([https://github.com/Rischiyuda) 
 
 - Herdi Ladania :
 
