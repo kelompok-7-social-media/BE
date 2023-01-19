@@ -68,29 +68,37 @@ func (pd *postingData) Update(userID int, postID int, updatedData posting.Core) 
 }
 
 func (pd *postingData) GetAllPost() ([]posting.Core, error) {
-	res := []Posting{}
-	err := pd.db.Find(&res).Error
-	if err != nil {
-		log.Println("getall post query error : ", err.Error())
-		return DataToCoreArr(res), err
-
+	var komentar []PostUser
+	tx := pd.db.Raw("SELECT postings.id, postings.postingan, postings.image_url, users.username FROM postings JOIN users ON users.id = postings.user_id  WHERE postings.deleted_at IS NULL").Find(&komentar)
+	if tx.Error != nil {
+		return nil, tx.Error
 	}
-	return []posting.Core{}, nil
+	var dataCore = ListModelTOCore(komentar)
+
+	return dataCore, nil
 }
 func (pd *postingData) Delete(userID int, postID int) error {
-	var record Posting
-	err := pd.db.Where("id = ? AND user_id = ?", postID, userID).Delete(&record).Error
-	if err != nil {
-		log.Println("delete post query error :", err.Error())
-		return err
+	post := Posting{}
+	err := pd.db.Where("id = ? AND user_id = ?", postID, userID).Delete(&post, postID)
+	if err.Error != nil {
+		log.Println("delete book query error :", err.Error)
+		return err.Error
 	}
+	if err.RowsAffected <= 0 {
+		log.Println("delete book query error : data not found")
+		return errors.New("not found")
+	}
+
 	return nil
 }
 func (pd *postingData) MyPost(userID int) ([]posting.Core, error) {
-	myPost := []Posting{}
-	if err := pd.db.Where("user_id = ?", userID).Find(&myPost).Error; err != nil {
-		log.Println("Get Mypost query error", err.Error())
-		return []posting.Core{}, err
+	var myBooks []PostUser
+	err := pd.db.Raw("SELECT postings.id, postings.postingan, postings.image_url, users.username FROM postings JOIN users ON users.id = postings.user_id WHERE postings.user_id = ?", userID).Find(&myBooks).Error
+	if err != nil {
+		return nil, err
 	}
-	return DataToCoreArr(myPost), nil
+
+	var dataCore = ListModelTOCore(myBooks)
+
+	return dataCore, nil
 }

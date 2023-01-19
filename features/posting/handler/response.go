@@ -9,6 +9,7 @@ type PostingResponse struct {
 	ID        uint   `json:"id"`
 	Postingan string `json:"postingan"`
 	UserName  string `json:"username"`
+	Image_url string `json:"Image_url"`
 }
 type AddPostingResponse struct {
 	Postingan string    `json:"postingan"`
@@ -37,7 +38,7 @@ func ToResponse(feature string, posting posting.Core) interface{} {
 		return PostingResponse{
 			ID:        posting.ID,
 			Postingan: posting.Postingan,
-			UserName:  posting.UserName,
+			UserName:  posting.Username,
 		}
 	}
 }
@@ -46,7 +47,8 @@ func ListPostCoreToPostRespon(dataCore posting.Core) PostingResponse { // data u
 	return PostingResponse{
 		ID:        dataCore.ID,
 		Postingan: dataCore.Postingan,
-		UserName:  dataCore.UserName,
+		Image_url: dataCore.Image_url,
+		UserName:  dataCore.Username,
 	}
 }
 func ListPostCoreToPostsRespon(dataCore []posting.Core) []PostingResponse {

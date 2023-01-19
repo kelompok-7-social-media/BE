@@ -21,7 +21,7 @@ type Posting struct {
 type PostUser struct {
 	ID        uint
 	Postingan string
-	UserName  string
+	Username  string
 	Image_url string
 	CreatedAt time.Time
 }
@@ -41,22 +41,21 @@ func ToCore(data Posting) posting.Core {
 	}
 }
 
-func DataToCore(data Posting) posting.Core {
+func (dataModel *PostUser) ModelsToCore() posting.Core { //fungsi yang mengambil data dari  user gorm(model.go)  dan merubah data ke entities usercore
 	return posting.Core{
-		ID:        data.ID,
-		Postingan: data.Postingan,
-		Image_url: data.Image_url,
-		UserName:  data.Image_url,
-		CreatedAt: data.CreatedAt,
+		ID:        dataModel.ID,
+		Image_url: dataModel.Image_url,
+		Postingan: dataModel.Postingan,
+		Username:  dataModel.Username,
 	}
 }
-func DataToCoreArr(data []Posting) []posting.Core {
-	var postArr = []posting.Core{}
-	for _, listOfPost := range data {
-		postArr = append(postArr, DataToCore(listOfPost))
-	}
 
-	return postArr
+func ListModelTOCore(dataModel []PostUser) []posting.Core { //fungsi yang mengambil data dari  user gorm(model.go)  dan merubah data ke entities usercore
+	var dataCore []posting.Core
+	for _, value := range dataModel {
+		dataCore = append(dataCore, value.ModelsToCore())
+	}
+	return dataCore //  untuk menampilkan data ke controller
 }
 
 // func ToCoreSlice(data []posting.Core) []Image {

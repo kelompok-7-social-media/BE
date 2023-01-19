@@ -7,8 +7,9 @@ import (
 type Core struct {
 	ID        uint
 	Comment   string `validate:"required"`
-	UserID    uint
 	PostingID uint
+	Username  string
+	UserID    uint
 	CreatedAt string
 }
 
@@ -17,6 +18,7 @@ type KomentarHandler interface {
 	GetCommentsByPost() echo.HandlerFunc
 	Delete() echo.HandlerFunc
 	Update() echo.HandlerFunc
+	GetAllKomen() echo.HandlerFunc
 }
 
 type KomentarService interface {
@@ -24,6 +26,7 @@ type KomentarService interface {
 	GetCommentsByPost(postID int) ([]Core, error)
 	Delete(token interface{}, postID int, commentID int) error
 	Update(token interface{}, commentID int, updatedComment Core) (Core, error)
+	GetAllKomen() ([]Core, error)
 }
 
 type KomentarData interface {
@@ -31,4 +34,5 @@ type KomentarData interface {
 	GetCommentsByPost(postID int) ([]Core, error)
 	Delete(UserID int, postID int, commentID int) error
 	Update(UserID, commentID int, updatedComment Core) (Core, error)
+	GetAllKomen() ([]Core, error)
 }

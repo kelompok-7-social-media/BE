@@ -83,3 +83,15 @@ func (kd *komentarData) Update(userID int, commentID int, updatedData komentar.C
 	// return result converting cnv to book.Core
 	return ToCore(cnv), nil
 }
+
+// GetAllKomen implements komentar.KomentarData
+func (kd *komentarData) GetAllKomen() ([]komentar.Core, error) {
+	var komentar []KomenUser
+	tx := kd.db.Raw("SELECT komentars.id, komentars.comment, komentars.posting_id, users.username FROM komentars JOIN users ON users.id = komentars.user_id JOIN postings ON postings.id = komentars.posting_id WHERE komentars.deleted_at IS NULL").Find(&komentar)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	var dataCore = ListModelTOCore(komentar)
+
+	return dataCore, nil
+}

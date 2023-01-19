@@ -91,3 +91,14 @@ func (kh *komentarHandle) Update() echo.HandlerFunc {
 	}
 
 }
+
+// GetAllKomen implements komentar.KomentarHandler
+func (kh *komentarHandle) GetAllKomen() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		result, _ := kh.srv.GetAllKomen()
+
+		listRes := ListCommentCoreToCommentsRespon(result)
+		fmt.Println("ini handler", listRes)
+		return c.JSON(helper.PrintSuccessReponse(http.StatusOK, "sukses menampilkan  Komentar", listRes))
+	}
+}
