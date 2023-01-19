@@ -69,27 +69,25 @@ func (kh *komentarHandle) Delete() echo.HandlerFunc {
 	}
 }
 
-// Update implements komentar.KomentarHandler
-// func (kh *komentarHandle) Update() echo.HandlerFunc {
-// 	return func(c echo.Context) error {
-// 		input := AddUpdateKomenRequest{}
-// 		KomenID, err := strconv.Atoi(c.Param("id"))
+func (kh *komentarHandle) Update() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		input := AddKomenRequest{}
+		KomenID, err := strconv.Atoi(c.Param("id"))
 
-// 		postID, err := strconv.Atoi(c.Param("posting_id"))
-// 		if err != nil {
-// 			return c.JSON(helper.PrintErrorResponse(err.Error()))
-// 		}
-// 		cnv := ToCore(input)
-// 		fmt.Println(cnv)
+		if err != nil {
+			return c.JSON(helper.PrintErrorResponse(err.Error()))
+		}
+		cnv := ToCore(input)
+		fmt.Println(cnv)
 
-// 		res, err := kh.srv.Update(c.Get("user"), KomenID, postID, *cnv)
-// 		if err != nil {
-// 			return c.JSON(helper.PrintErrorResponse(err.Error()))
-// 		}
+		res, err := kh.srv.Update(c.Get("user"), KomenID, *cnv)
+		if err != nil {
+			return c.JSON(helper.PrintErrorResponse(err.Error()))
+		}
 
-// 		posting := ToResponse("update", res)
+		posting := ToResponse("update", res)
 
-// 		return c.JSON(helper.PrintSuccessReponse(http.StatusOK, "sukses mengubah komentar", posting))
-// 	}
+		return c.JSON(helper.PrintSuccessReponse(http.StatusOK, "sukses mengubah komentar", posting))
+	}
 
-// }
+}

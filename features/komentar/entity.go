@@ -16,16 +16,19 @@ type KomentarHandler interface {
 	Add() echo.HandlerFunc
 	GetCommentsByPost() echo.HandlerFunc
 	Delete() echo.HandlerFunc
+	Update() echo.HandlerFunc
 }
 
 type KomentarService interface {
 	Add(token interface{}, newComment Core) (Core, error)
 	GetCommentsByPost(postID int) ([]Core, error)
 	Delete(token interface{}, postID int, commentID int) error
+	Update(token interface{}, commentID int, updatedComment Core) (Core, error)
 }
 
 type KomentarData interface {
 	Add(userID int, newComment Core) (Core, error)
 	GetCommentsByPost(postID int) ([]Core, error)
 	Delete(UserID int, postID int, commentID int) error
+	Update(UserID, commentID int, updatedComment Core) (Core, error)
 }
