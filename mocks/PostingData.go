@@ -34,6 +34,87 @@ func (_m *PostingData) Add(userID int, newPosting posting.Core) (posting.Core, e
 	return r0, r1
 }
 
+// Delete provides a mock function with given fields: userID, bookID
+func (_m *PostingData) Delete(userID int, bookID int) error {
+	ret := _m.Called(userID, bookID)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(int, int) error); ok {
+		r0 = rf(userID, bookID)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// GetAllPost provides a mock function with given fields:
+func (_m *PostingData) GetAllPost() ([]posting.Core, error) {
+	ret := _m.Called()
+
+	var r0 []posting.Core
+	if rf, ok := ret.Get(0).(func() []posting.Core); ok {
+		r0 = rf()
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]posting.Core)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func() error); ok {
+		r1 = rf()
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MyPost provides a mock function with given fields: userID
+func (_m *PostingData) MyPost(userID int) ([]posting.Core, error) {
+	ret := _m.Called(userID)
+
+	var r0 []posting.Core
+	if rf, ok := ret.Get(0).(func(int) []posting.Core); ok {
+		r0 = rf(userID)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]posting.Core)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(int) error); ok {
+		r1 = rf(userID)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// Update provides a mock function with given fields: userID, bookID, updatedData
+func (_m *PostingData) Update(userID int, bookID int, updatedData posting.Core) (posting.Core, error) {
+	ret := _m.Called(userID, bookID, updatedData)
+
+	var r0 posting.Core
+	if rf, ok := ret.Get(0).(func(int, int, posting.Core) posting.Core); ok {
+		r0 = rf(userID, bookID, updatedData)
+	} else {
+		r0 = ret.Get(0).(posting.Core)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(int, int, posting.Core) error); ok {
+		r1 = rf(userID, bookID, updatedData)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 type mockConstructorTestingTNewPostingData interface {
 	mock.TestingT
 	Cleanup(func())
