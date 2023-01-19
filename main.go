@@ -59,9 +59,9 @@ func main() {
 
 	e.POST("/comment", commentHdl.Add(), middleware.JWT([]byte(config.JWT_KEY)))
 	e.GET("/allcomment", commentHdl.GetAllKomen())
-	e.GET("/comment/:post_id", commentHdl.GetCommentsByPost(), middleware.JWT([]byte(config.JWT_KEY))) //ini g bisa di cek lagi
-	e.PUT("/comment", commentHdl.Update(), middleware.JWT([]byte(config.JWT_KEY)))                     ///ini g bisa di cek lagi
-	e.DELETE("/comment", commentHdl.Delete(), middleware.JWT([]byte(config.JWT_KEY)))                  ///ini g bisa di cek lagi endpoint
+	e.GET("/comment/:post_id", commentHdl.GetCommentsByPost())                        //ini g bisa di cek lagi
+	e.PUT("/comment", commentHdl.Update(), middleware.JWT([]byte(config.JWT_KEY)))    ///ini g bisa di cek lagi
+	e.DELETE("/comment", commentHdl.Delete(), middleware.JWT([]byte(config.JWT_KEY))) ///ini g bisa di cek lagi endpoint
 	// e.PUT("/comment/:id", commentHdl.Update(), middleware.JWT([]byte(config.JWT_KEY)))
 	if err := e.Start(":8000"); err != nil {
 		log.Println(err.Error())
