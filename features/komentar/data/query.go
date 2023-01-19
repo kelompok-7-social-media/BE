@@ -53,9 +53,9 @@ func (kd *komentarData) GetCommentsByPost(postID int) ([]komentar.Core, error) {
 	return dataCore, nil
 }
 
-func (kd *komentarData) Delete(userID int, postID int, commentID int) error {
+func (kd *komentarData) Delete(userID int, commentID int) error {
 	var record Komentar
-	err := kd.db.Where("id = ? AND user_id = ? AND post_id = ? ", commentID, userID, postID).Delete(&record).Error
+	err := kd.db.Where("id = ? AND user_id = ?", commentID, userID).Delete(&record).Error
 	if err != nil {
 		log.Println("delete comment query error :", err.Error())
 		return err

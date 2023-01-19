@@ -66,13 +66,13 @@ func (ks *komentarSrv) GetCommentsByPost(postID int) ([]komentar.Core, error) {
 	}
 	return All, nil
 }
-func (ks *komentarSrv) Delete(token interface{}, postID int, commentID int) error {
+func (ks *komentarSrv) Delete(token interface{}, commentID int) error {
 	userID := helper.ExtractToken(token)
 	if userID <= 0 {
 		return errors.New("user not found")
 	}
 
-	err := ks.data.Delete(userID, postID, commentID)
+	err := ks.data.Delete(userID, commentID)
 	if err != nil {
 		msg := ""
 		if strings.Contains(err.Error(), "not found") {
