@@ -41,16 +41,15 @@ func (kd *komentarData) Add(userID int, newKomen komentar.Core) (komentar.Core, 
 
 	return newKomen, nil
 }
-func (kd *komentarData) GetCommentsByPost(postID int) ([]komentar.Core, error) {
-	comments := []KomenUser{}
-	err := kd.db.Raw("SELECT komentars.id, komentars.comment, komentars.posting_id, users.username FROM komentars JOIN postings ON postings.id = postings.id JOIN users ON users.id = komentars.user_id WHERE komentars.posting_id = ?", postID).Find(&comments).Error
-	if err != nil {
-		return nil, err
+func (kd *komentarData) GetCommentsByPost(userID int, postID int) ([]komentar.Core, error) {
+	comments := []Komentar{}
+	if err := kd.db.Where("user_id andd post_id = ?", userID, postID).Find(&comments).Error; err != nil {
+		log.Println("Get Mypost query error", err.Error())
+		return []komentar.Core{}, err
 	}
 
-	var dataCore = ListModelTOCore(comments)
 
-	return dataCore, nil
+  return DataToCore(comment), nil
 }
 
 func (kd *komentarData) Delete(userID int, postID int, commentID int) error {

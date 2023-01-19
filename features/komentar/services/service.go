@@ -53,8 +53,9 @@ func (ks *komentarSrv) Add(token interface{}, newKomen komentar.Core) (komentar.
 
 	return res, nil
 }
-func (ks *komentarSrv) GetCommentsByPost(postID int) ([]komentar.Core, error) {
-	All, err := ks.data.GetCommentsByPost(postID)
+func (ks *komentarSrv) GetCommentsByPost(token interface{}, postID int) ([]komentar.Core, error) {
+	userID := helper.ExtractToken(token)
+	All, err := ks.data.GetCommentsByPost(userID, postID)
 	if err != nil {
 		msg := ""
 		if strings.Contains(err.Error(), "not found") {
