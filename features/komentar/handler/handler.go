@@ -68,36 +68,36 @@ func (kh *komentarHandle) Delete() echo.HandlerFunc {
 	}
 }
 
-func (kh *komentarHandle) Update() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		input := AddKomenRequest{}
-		KomenID, err := strconv.Atoi(c.Param("id"))
+// func (kh *komentarHandle) Update() echo.HandlerFunc {
+// 	return func(c echo.Context) error {
+// 		input := AddKomenRequest{}
+// 		KomenID, err := strconv.Atoi(c.Param("id"))
 
-		if err != nil {
-			return c.JSON(helper.PrintErrorResponse(err.Error()))
-		}
-		cnv := ToCore(input)
-		fmt.Println(cnv)
+// 		if err != nil {
+// 			return c.JSON(helper.PrintErrorResponse(err.Error()))
+// 		}
+// 		cnv := ToCore(input)
+// 		fmt.Println(cnv)
 
-		res, err := kh.srv.Update(c.Get("user"), KomenID, *cnv)
-		if err != nil {
-			return c.JSON(helper.PrintErrorResponse(err.Error()))
-		}
+// 		res, err := kh.srv.Update(c.Get("user"), KomenID, *cnv)
+// 		if err != nil {
+// 			return c.JSON(helper.PrintErrorResponse(err.Error()))
+// 		}
 
-		posting := ToResponse("update", res)
+// 		posting := ToResponse("update", res)
 
-		return c.JSON(helper.PrintSuccessReponse(http.StatusOK, "sukses mengubah komentar", posting))
-	}
+// 		return c.JSON(helper.PrintSuccessReponse(http.StatusOK, "sukses mengubah komentar", posting))
+// 	}
 
-}
+// }
 
 // GetAllKomen implements komentar.KomentarHandler
-func (kh *komentarHandle) GetAllKomen() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		result, _ := kh.srv.GetAllKomen()
+// func (kh *komentarHandle) GetAllKomen() echo.HandlerFunc {
+// 	return func(c echo.Context) error {
+// 		result, _ := kh.srv.GetAllKomen()
 
-		listRes := ListCommentCoreToCommentsRespon(result)
-		fmt.Println("ini handler", listRes)
-		return c.JSON(helper.PrintSuccessReponse(http.StatusOK, "sukses menampilkan  Komentar", listRes))
-	}
-}
+// 		listRes := ListCommentCoreToCommentsRespon(result)
+// 		fmt.Println("ini handler", listRes)
+// 		return c.JSON(helper.PrintSuccessReponse(http.StatusOK, "sukses menampilkan  Komentar", listRes))
+// 	}
+// }
