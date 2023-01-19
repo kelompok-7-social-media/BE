@@ -31,7 +31,7 @@ git@github.com:kelompok-7-social-media/BE.git
 
 <p align="center">
   <a href="https://skillicons.dev">
-    <img src="https://skillicons.dev/icons?i=go,mysql,echo,aws,viper,tailwind&perline=3" />
+    <img src="https://skillicons.dev/icons?i=go,mysql,vscode,aws,tailwind&perline=3" />
   </a>
 </p>
 
@@ -58,7 +58,6 @@ git@github.com:kelompok-7-social-media/BE.git
 - Rischi Yuda:
 
   [![GitHub](https://img.shields.io/badge/- Rischi-black?style=for-the-badge&logo=github&logoColor=white)]([https://github.com/Rischiyuda) 
-  [![LinkedIn](https://img.shields.io/badge/-Rischi-blue?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/rischi-yuda-ryo17/)
 
 - Herdi Ladania :
 
