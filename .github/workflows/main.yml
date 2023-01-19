@@ -42,4 +42,4 @@ jobs:
           docker pull ${{ secrets.DOCKER_USER }}/project
           docker stop project 
           docker rm project
-          docker run -d -p 8000:8000 -e SERVER_PORT=${{ secrets.SERVER_PORT }} -e DBUSER=${{ secrets.DBUSER }} -e DBPASS=${{ secrets.DBPASS }} -e DBHOST=${{ secrets.DBHOST }} -e DBPORT=${{ secrets.DBPORT }} -e DBNAME=${{ secrets.DBNAME }} --name project ${{ secrets.DOCKER_USER }}/project:latest 
+          docker run -d -p 8000:8000 -e SERVER_PORT=${{ secrets.SERVER_PORT }} -e DBUSER=${{ secrets.DBUSER }} -e DBPASS=${{ secrets.DBPASS }} -e DBHOST=${{ secrets.DBHOST }} -e DBPORT=${{ secrets.DBPORT }} -e DBNAME=${{ secrets.DBNAME }} -e AWS_BUCKET_NAME=${{secrets.AWS_BUCKET_NAME}} -e AWS_REGION=${{secrets.AWS_REGION}} -e ACCESS_KEY_IAM=${{secrets.ACCESS_KEY_IAM}} -e SECRET_KEY_IAM=${{secrets.SECRET_KEY_IAM}} --name project ${{ secrets.DOCKER_USER }}/project:latest 
