@@ -87,26 +87,26 @@ func (ks *komentarSrv) Delete(token interface{}, postID int, commentID int) erro
 }
 
 // Update implements komentar.KomentarService
-// func (ks *komentarSrv) Update(token interface{}, komenID int, postID int, updatedData komentar.Core) (komentar.Core, error) {
-// 	userID := helper.ExtractToken(token)
-// 	if userID <= 0 {
-// 		return komentar.Core{}, errors.New("id user not found")
-// 	}
-// 	if validasieror := ks.validasi.Struct(updatedData); validasieror != nil {
-// 		return komentar.Core{}, nil
-// 	}
+func (ks *komentarSrv) Update(token interface{}, commentID int, updatedData komentar.Core) (komentar.Core, error) {
+	userID := helper.ExtractToken(token)
+	if userID <= 0 {
+		return komentar.Core{}, errors.New("id user not found")
+	}
+	if validasieror := ks.validasi.Struct(updatedData); validasieror != nil {
+		return komentar.Core{}, nil
+	}
 
-// 	res, err := ks.data.Update(userID, komenID, postID, updatedData)
-// 	if err != nil {
-// 		fmt.Println(err)
-// 		msg := ""
-// 		if strings.Contains(err.Error(), "not found") {
-// 			msg = "komentar not found"
-// 		} else {
-// 			msg = "internal server error"
-// 		}
-// 		return komentar.Core{}, errors.New(msg)
-// 	}
+	res, err := ks.data.Update(userID, commentID, updatedData)
+	if err != nil {
+		fmt.Println(err)
+		msg := ""
+		if strings.Contains(err.Error(), "not found") {
+			msg = "komentar not found"
+		} else {
+			msg = "internal server error"
+		}
+		return komentar.Core{}, errors.New(msg)
+	}
 
-// 	return res, nil
-// }
+	return res, nil
+}

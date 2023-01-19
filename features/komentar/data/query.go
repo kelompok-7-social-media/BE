@@ -50,7 +50,7 @@ func (kd *komentarData) GetCommentsByPost(postID int) ([]komentar.Core, error) {
 	return DataToCoreArr(comments), nil
 }
 
-func (kd *komentarData) Delete(userID, postID int, commentID int) error {
+func (kd *komentarData) Delete(userID int, postID int, commentID int) error {
 	var record Komentar
 	err := kd.db.Where("id = ? AND user_id = ? AND post_id = ? ", commentID, userID, postID).Delete(&record).Error
 	if err != nil {
@@ -61,23 +61,25 @@ func (kd *komentarData) Delete(userID, postID int, commentID int) error {
 }
 
 // Update implements komentar.KomentarData
-// func (kd *komentarData) Update(userID int, komenID int, postID int, updatedData komentar.Core) (komentar.Core, error) {
-// 	cnv := CoreToData(updatedData)
+func (kd *komentarData) Update(userID int, commentID int, updatedData komentar.Core) (komentar.Core, error) {
+	cnv := CoreToData(updatedData)
+	cnv.ID = uint(commentID)
+	cnv.UserID = uint(userID)
 
-// 	// DB Update(value)
-// 	tx := kd.db.Where("id = ? && user_id = ? && posting_id = ?", komenID, userID, postID).Updates(&cnv)
-// 	if tx.Error != nil {
-// 		log.Println("update book query error :", tx.Error)
-// 		return komentar.Core{}, tx.Error
+	// DB Update(value)
+	tx := kd.db.Model(&cnv).Where("user_id = ?", userID).Updates(&cnv)
+	if tx.Error != nil {
+		log.Println("update comment query error :", tx.Error)
+		return komentar.Core{}, tx.Error
 
-// 	}
+	}
 
-// 	// Rows affected checking
-// 	if tx.RowsAffected <= 0 {
-// 		log.Println("update book query error : data not found")
-// 		return komentar.Core{}, errors.New("not found")
-// 	}
+	// Rows affected checking
+	if tx.RowsAffected <= 0 {
+		log.Println("update comment query error : data not found")
+		return komentar.Core{}, errors.New("not found")
+	}
 
-// 	// return result converting cnv to book.Core
-// 	return ToCore(cnv), nil
-// }
+	// return result converting cnv to book.Core
+	return ToCore(cnv), nil
+}
