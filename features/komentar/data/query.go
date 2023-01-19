@@ -48,9 +48,9 @@ func (kd *komentarData) GetCommentsByPost(userID int, postID int) ([]komentar.Co
 		return []komentar.Core{}, err
 	}
 
-	var dataCore = ListModelTOCore(comments)
+	// var dataCore = ListModelTOCore(comments)
 
-	return dataCore, nil
+	return DataToCoreArr(comments), nil
 }
 
 func (kd *komentarData) Delete(userID int, postID int, commentID int) error {
