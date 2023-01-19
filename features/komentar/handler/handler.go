@@ -49,7 +49,7 @@ func (kh *komentarHandle) Add() echo.HandlerFunc {
 func (kh *komentarHandle) GetCommentsByPost() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		postID, _ := strconv.Atoi(c.Param("post_id"))
-		result, _ := kh.srv.GetCommentsByPost(postID)
+		result, _ := kh.srv.GetCommentsByPost(c.Get("user"), postID)
 
 		listRes := ListCommentCoreToCommentsRespon(result)
 		return c.JSON(helper.PrintSuccessReponse(http.StatusOK, "sukses menampilkan  post", listRes))

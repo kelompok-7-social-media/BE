@@ -41,9 +41,9 @@ func (kd *komentarData) Add(userID int, newKomen komentar.Core) (komentar.Core, 
 
 	return newKomen, nil
 }
-func (kd *komentarData) GetCommentsByPost(postID int) ([]komentar.Core, error) {
+func (kd *komentarData) GetCommentsByPost(userID int, postID int) ([]komentar.Core, error) {
 	comments := []Komentar{}
-	if err := kd.db.Where("post_id = ?", postID).Find(&comments).Error; err != nil {
+	if err := kd.db.Where("user_id andd post_id = ?", userID, postID).Find(&comments).Error; err != nil {
 		log.Println("Get Mypost query error", err.Error())
 		return []komentar.Core{}, err
 	}
