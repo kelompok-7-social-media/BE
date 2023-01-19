@@ -47,7 +47,9 @@ func (kd *komentarData) GetCommentsByPost(userID int, postID int) ([]komentar.Co
 		log.Println("Get Mypost query error", err.Error())
 		return []komentar.Core{}, err
 	}
-	return DataToCoreArr(comments), nil
+
+
+  return DataToCore(comment), nil
 }
 
 func (kd *komentarData) Delete(userID int, postID int, commentID int) error {
