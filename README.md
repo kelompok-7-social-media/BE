@@ -47,7 +47,7 @@ git@github.com:kelompok-7-social-media/BE.git
 
 ### 🧰Frontend
 
-- [Github Repository for the Backend team](https://github.com/kelompok-7-social-media/FE)
+- [Github Repository for the Frontend team](https://github.com/kelompok-7-social-media/FE)
 
 ## 🤖Author
 
