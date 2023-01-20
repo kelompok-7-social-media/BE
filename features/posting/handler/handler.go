@@ -40,8 +40,6 @@ func (ph *postingHandle) Add() echo.HandlerFunc {
 			}
 			input.Image_url = res
 			// fmt.Println(input.Image_url)
-		} else {
-			input.Image_url = "https://project3bucker.s3.ap-southeast-1.amazonaws.com/dummy-profile-pic.png"
 		}
 
 		if err := c.Bind(&input); err != nil {
@@ -77,8 +75,6 @@ func (ph *postingHandle) Update() echo.HandlerFunc {
 			}
 			input.Image_url = res
 			// fmt.Println(input.Image_url)
-		} else {
-			input.Image_url = "https://project3bucker.s3.ap-southeast-1.amazonaws.com/dummy-profile-pic.png"
 		}
 
 		if err := c.Bind(&input); err != nil {
