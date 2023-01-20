@@ -9,16 +9,16 @@ type PostingResponse struct {
 	ID        uint   `json:"id"`
 	Postingan string `json:"postingan"`
 	UserName  string `json:"username"`
-	Image_url string `json:"Image_url"`
+	Image_url string `json:"image_url"`
 }
 type AddPostingResponse struct {
 	Postingan string    `json:"postingan"`
-	Image_url string    `json:"Image_url"`
+	Image_url string    `json:"image_url"`
 	CreatedAt time.Time `json:"tanggal"`
 }
 type updatePostingResponse struct {
 	Postingan string `json:"postingan"`
-	Image_url string `json:"Image_url"`
+	Image_url string `json:"image_url"`
 }
 
 func ToResponse(feature string, posting posting.Core) interface{} {
